@@ -1,38 +1,35 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Policy;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
-using Windows.Foundation;
 using Windows.Media.Control;
 
 namespace WindowsMediaController
 {
     public static class MediaManager
     {
-        public delegate void MediaSessionDelegate(MediaSession session);
+        public delegate void SourceChangeDelegate(MediaSession session);
+        public delegate void PlaybackChangeDelegate(MediaSession session, GlobalSystemMediaTransportControlsSessionPlaybackInfo playbackInfo);
+        public delegate void SongChangeDelegate(MediaSession session, GlobalSystemMediaTransportControlsSessionMediaProperties mediaProperties);
 
         /// <summary>
         /// Triggered when a new media source gets added to the MediaSessions
         /// </summary>
-        public static event MediaSessionDelegate OnNewSource;
+        public static event SourceChangeDelegate OnNewSource;
 
         /// <summary>
         /// Triggered when a media source gets removed from the MediaSessions
         /// </summary>
-        public static event MediaSessionDelegate OnRemovedSource;
+        public static event SourceChangeDelegate OnRemovedSource;
 
         /// <summary>
         /// Triggered when a playback state changes of a MediaSession
         /// </summary>
-        public static event TypedEventHandler<MediaSession, GlobalSystemMediaTransportControlsSessionPlaybackInfo> OnPlaybackStateChanged;
+        public static event PlaybackChangeDelegate OnPlaybackStateChanged;
 
         /// <summary>
         /// Triggered when a song changes of a MediaSession
         /// </summary>
-        public static event TypedEventHandler<MediaSession, GlobalSystemMediaTransportControlsSessionMediaProperties> OnSongChanged;
+        public static event SongChangeDelegate OnSongChanged;
         
         /// <summary>
         /// A dictionary of the current MediaSessions
@@ -125,12 +122,10 @@ namespace WindowsMediaController
                 RemoveSession(this);
             }
 
-
             internal async void OnSongChange(GlobalSystemMediaTransportControlsSession session, MediaPropertiesChangedEventArgs args = null)
             {
                 OnSongChanged?.Invoke(this, await session.TryGetMediaPropertiesAsync());
             }
         }
-
     }
 }
