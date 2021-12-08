@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Windows.Media.Control;
 
 namespace WindowsMediaController
 {
-    public class MediaManager
+    public class MediaManager : IDisposable
     {
         public delegate void SourceChangeDelegate(MediaSession session);
         public delegate void PlaybackChangeDelegate(MediaSession session, GlobalSystemMediaTransportControlsSessionPlaybackInfo playbackInfo);
@@ -38,53 +39,56 @@ namespace WindowsMediaController
 
 
         private bool IsStarted;
+        private GlobalSystemMediaTransportControlsSessionManager windowsSessionManager;
 
         /// <summary>
         /// This starts the MediaManager
         /// This can be changed to a constructor if you don't care for the first few 'new sources' events
         /// </summary>
-        public void Start()
+        public async Task Start()
         {
             if (!IsStarted)
             {
-                var sessionManager = GlobalSystemMediaTransportControlsSessionManager.RequestAsync().GetAwaiter().GetResult();
-                SessionsChanged(sessionManager);
-                sessionManager.SessionsChanged += SessionsChanged;
+                windowsSessionManager = await GlobalSystemMediaTransportControlsSessionManager.RequestAsync();
+                SessionsChanged(windowsSessionManager);
+                windowsSessionManager.SessionsChanged += SessionsChanged;
                 IsStarted = true;
             }
             else
             {
-                throw new InvalidOperationException("MediaController Already Started");
+                throw new InvalidOperationException("MediaManager already started");
             }
         }
 
-        private void SessionsChanged(GlobalSystemMediaTransportControlsSessionManager sender, SessionsChangedEventArgs args = null)
+        private void SessionsChanged(GlobalSystemMediaTransportControlsSessionManager winSessionManager, SessionsChangedEventArgs args = null)
         {
-            var sessionList = sender.GetSessions();
+            var controlSessionList = winSessionManager.GetSessions();
 
-            foreach (var session in sessionList)
+            //Checking for any new sessions, if found a new one add it to our dictiony and fire OnNewSource
+            foreach (var controlSession in controlSessionList)
             {
-                if (!CurrentMediaSessions.ContainsKey(session.SourceAppUserModelId))
+                if (!CurrentMediaSessions.ContainsKey(controlSession.SourceAppUserModelId))
                 {
-                    MediaSession mediaSession = new MediaSession(session, this);
-                    CurrentMediaSessions[session.SourceAppUserModelId] = mediaSession;
+                    MediaSession mediaSession = new MediaSession(controlSession, this);
+                    CurrentMediaSessions[controlSession.SourceAppUserModelId] = mediaSession;
                     OnNewSource?.Invoke(mediaSession);
-                    mediaSession.OnSongChange(session);
+                    mediaSession.OnSongChange(controlSession);
                 }
             }
 
-            IEnumerable<string> currentSessionIds = sessionList.Select(x=> x.SourceAppUserModelId);
+            //Checking if a source fell off the session list without doing a proper Closed event (*cough* spotify *cough*)
+            IEnumerable<string> controlSessionIds = controlSessionList.Select(x=> x.SourceAppUserModelId);
             List<MediaSession> sessionsToRemove = new List<MediaSession>();
 
             foreach(var session in CurrentMediaSessions)
             {
-                if (!currentSessionIds.Contains(session.Key))
+                if (!controlSessionIds.Contains(session.Key))
                 {
                     sessionsToRemove.Add(session.Value);
                 }
             }
 
-            sessionsToRemove.ForEach(x => x.RemoveSource());
+            sessionsToRemove.ForEach(x => x.Dispose());
         }
 
 
@@ -94,43 +98,74 @@ namespace WindowsMediaController
             OnRemovedSource?.Invoke(mediaSession);
         }
 
-        public class MediaSession
+        public void StopAndReset() 
+        {
+            if (IsStarted)
+            {
+                Dispose();
+            }
+            else
+            {
+                throw new InvalidOperationException("MediaManager did not start yet");
+            }
+        }
+
+        public void Dispose()
+        {
+            OnNewSource = null;
+            OnRemovedSource = null;
+            OnSongChanged = null;
+            OnPlaybackStateChanged = null;
+
+            foreach (var mediaSession in CurrentMediaSessions)
+            {
+                mediaSession.Value.Dispose();
+            }
+            CurrentMediaSessions?.Clear();
+
+            IsStarted = false;
+            windowsSessionManager.SessionsChanged -= SessionsChanged;
+            windowsSessionManager = null;
+        }
+
+        public class MediaSession : IDisposable
         {
             public GlobalSystemMediaTransportControlsSession ControlSession;
             internal MediaManager MediaManagerInstance;
 
-            internal MediaSession(GlobalSystemMediaTransportControlsSession ctrlSession, MediaManager mediaMangerInstance)
+            internal MediaSession(GlobalSystemMediaTransportControlsSession controlSession, MediaManager mediaMangerInstance)
             {
                 MediaManagerInstance = mediaMangerInstance;
-                ControlSession = ctrlSession;
+                ControlSession = controlSession;
                 ControlSession.MediaPropertiesChanged += OnSongChange;
                 ControlSession.PlaybackInfoChanged += OnPlaybackInfoChanged;
             }
 
 
-            private void OnPlaybackInfoChanged(GlobalSystemMediaTransportControlsSession session, PlaybackInfoChangedEventArgs args = null)
+            private void OnPlaybackInfoChanged(GlobalSystemMediaTransportControlsSession controlSession, PlaybackInfoChangedEventArgs args = null)
             {
-                var props = session.GetPlaybackInfo();
-                if (props.PlaybackStatus == GlobalSystemMediaTransportControlsSessionPlaybackStatus.Closed)
+                var playbackInfo = controlSession.GetPlaybackInfo();
+
+                if (playbackInfo.PlaybackStatus == GlobalSystemMediaTransportControlsSessionPlaybackStatus.Closed)
                 {
-                    RemoveSource();
+                    Dispose();
                 }
                 else
                 {
-                    MediaManagerInstance.OnPlaybackStateChanged?.Invoke(this, props);
+                    MediaManagerInstance.OnPlaybackStateChanged?.Invoke(this, playbackInfo);
                 }
             }
 
-            internal void RemoveSource()
+            internal async void OnSongChange(GlobalSystemMediaTransportControlsSession controlSession, MediaPropertiesChangedEventArgs args = null)
+            {
+                MediaManagerInstance.OnSongChanged?.Invoke(this, await controlSession.TryGetMediaPropertiesAsync());
+            }
+
+            public void Dispose()
             {
                 ControlSession.PlaybackInfoChanged -= OnPlaybackInfoChanged;
                 ControlSession.MediaPropertiesChanged -= OnSongChange;
                 MediaManagerInstance.RemoveSource(this);
-            }
-
-            internal async void OnSongChange(GlobalSystemMediaTransportControlsSession session, MediaPropertiesChangedEventArgs args = null)
-            {
-                MediaManagerInstance.OnSongChanged?.Invoke(this, await session.TryGetMediaPropertiesAsync());
             }
         }
     }

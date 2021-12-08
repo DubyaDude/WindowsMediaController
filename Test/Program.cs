@@ -11,7 +11,11 @@ namespace Tester
     class Program
     {
         static MediaManager mediaManager;
-        static void Main()
+
+        public static void Main()
+            => Start().GetAwaiter().GetResult();
+
+        static async Task Start()
         {
             mediaManager = new MediaManager();
 
@@ -19,10 +23,13 @@ namespace Tester
             mediaManager.OnRemovedSource += MediaManager_OnRemovedSource;
             mediaManager.OnPlaybackStateChanged += MediaManager_OnPlaybackStateChanged;
             mediaManager.OnSongChanged += MediaManager_OnSongChanged;
-            mediaManager.Start();
-            while (true)
-                Console.ReadLine();
+            await mediaManager.Start();
+
+            InfTask().GetAwaiter().GetResult();
         }
+        private static async Task InfTask() => await Task.Delay(-1);
+
+
         private static void MediaManager_OnNewSource(MediaManager.MediaSession session)
         {
             WriteLineColor("-- New Source: " + session.ControlSession.SourceAppUserModelId, ConsoleColor.Green);
