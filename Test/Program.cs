@@ -10,13 +10,16 @@ namespace Tester
 {
     class Program
     {
-        static void Main(string[] args)
+        static MediaManager mediaManager;
+        static void Main()
         {
-            MediaManager.OnNewSource += MediaManager_OnNewSource;
-            MediaManager.OnRemovedSource += MediaManager_OnRemovedSource;
-            MediaManager.OnPlaybackStateChanged += MediaManager_OnPlaybackStateChanged;
-            MediaManager.OnSongChanged += MediaManager_OnSongChanged;
-            MediaManager.Start();
+            mediaManager = new MediaManager();
+
+            mediaManager.OnNewSource += MediaManager_OnNewSource;
+            mediaManager.OnRemovedSource += MediaManager_OnRemovedSource;
+            mediaManager.OnPlaybackStateChanged += MediaManager_OnPlaybackStateChanged;
+            mediaManager.OnSongChanged += MediaManager_OnSongChanged;
+            mediaManager.Start();
             while (true)
                 Console.ReadLine();
         }
@@ -36,7 +39,7 @@ namespace Tester
 
         private static void MediaManager_OnPlaybackStateChanged(MediaManager.MediaSession sender, GlobalSystemMediaTransportControlsSessionPlaybackInfo args)
         {
-            WriteLineColor($"{sender.ControlSession.SourceAppUserModelId} is now {args.PlaybackStatus}", ConsoleColor.Magenta);
+            WriteLineColor($"{sender.ControlSession.SourceAppUserModelId} is now {args.PlaybackStatus}", ConsoleColor.Yellow);
         }
 
 
