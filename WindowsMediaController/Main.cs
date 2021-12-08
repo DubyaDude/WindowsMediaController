@@ -71,6 +71,19 @@ namespace WindowsMediaController
                     mediaSession.OnSongChange(session);
                 }
             }
+
+            IEnumerable<string> currentSessionIds = sessionList.Select(x=> x.SourceAppUserModelId);
+            List<MediaSession> sessionsToRemove = new List<MediaSession>();
+
+            foreach(var session in CurrentMediaSessions)
+            {
+                if (!currentSessionIds.Contains(session.Key))
+                {
+                    sessionsToRemove.Add(session.Value);
+                }
+            }
+
+            sessionsToRemove.ForEach(x => x.RemoveSelf());
         }
 
 
@@ -83,7 +96,6 @@ namespace WindowsMediaController
         public class MediaSession
         {
             public GlobalSystemMediaTransportControlsSession ControlSession;
-            public string LastSong;
 
             public MediaSession(GlobalSystemMediaTransportControlsSession ctrlSession)
             {
@@ -98,9 +110,7 @@ namespace WindowsMediaController
                 var props = session.GetPlaybackInfo();
                 if (props.PlaybackStatus == GlobalSystemMediaTransportControlsSessionPlaybackStatus.Closed)
                 {
-                    session.PlaybackInfoChanged -= OnPlaybackInfoChanged;
-                    session.MediaPropertiesChanged -= OnSongChange;
-                    RemoveSession(this);
+                    RemoveSelf();
                 }
                 else
                 {
@@ -108,18 +118,17 @@ namespace WindowsMediaController
                 }
             }
 
+            internal void RemoveSelf()
+            {
+                ControlSession.PlaybackInfoChanged -= OnPlaybackInfoChanged;
+                ControlSession.MediaPropertiesChanged -= OnSongChange;
+                RemoveSession(this);
+            }
+
 
             internal async void OnSongChange(GlobalSystemMediaTransportControlsSession session, MediaPropertiesChangedEventArgs args = null)
             {
-                var props = await session.TryGetMediaPropertiesAsync();
-                string song = $"{props.Title} | {props.Artist}";
-
-                //This is needed because for some reason this method is invoked twice every song change
-                if (LastSong != song && !(String.IsNullOrWhiteSpace(props.Title) && String.IsNullOrWhiteSpace(props.Artist)))
-                {
-                    LastSong = song;
-                    OnSongChanged?.Invoke(this, props);
-                }
+                OnSongChanged?.Invoke(this, await session.TryGetMediaPropertiesAsync());
             }
         }
 
