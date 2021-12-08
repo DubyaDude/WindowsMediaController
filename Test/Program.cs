@@ -26,6 +26,7 @@ namespace Tester
             await mediaManager.Start();
 
             InfTask().GetAwaiter().GetResult();
+            mediaManager.Dispose();
         }
         private static async Task InfTask() => await Task.Delay(-1);
 
