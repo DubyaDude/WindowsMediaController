@@ -35,7 +35,7 @@ namespace Sample.UI
             mediaManager.OnAnyNewSource += MediaManager_OnAnyNewSource;
             mediaManager.OnAnyRemovedSource += MediaManager_OnAnyRemovedSource;
 
-            mediaManager.Start();
+            mediaManager.Start().GetAwaiter().GetResult();
         }
 
         private void MediaManager_OnAnyNewSource(MediaSession mediaSession)
@@ -43,7 +43,7 @@ namespace Sample.UI
             Application.Current.Dispatcher.Invoke(() =>
             {
                 var menuItem = new NavigationViewItem();
-                menuItem.Content = mediaSession.ControlSession.SourceAppUserModelId;
+                menuItem.Content = mediaSession.Id;
                 menuItem.Icon = new SymbolIcon() { Symbol = Symbol.Audio };
                 menuItem.Tag = mediaSession;
                 SongList.MenuItems.Add(menuItem);
@@ -57,8 +57,8 @@ namespace Sample.UI
                 List<NavigationViewItem?> itemsToRemove = new List<NavigationViewItem?>();
 
                 foreach (NavigationViewItem? item in SongList.MenuItems)
-                    if (item?.Content.ToString() == session.ControlSession.SourceAppUserModelId)
-                        itemsToRemove.Add(item);
+                        if (item?.Content.ToString() == session.Id)
+                            itemsToRemove.Add(item);
 
                 itemsToRemove.ForEach(x => SongList.MenuItems.Remove(x));
             });
@@ -76,7 +76,6 @@ namespace Sample.UI
             if(navView.SelectedItem != null)
             {
                 currentSession = (MediaSession)((NavigationViewItem)navView.SelectedItem).Tag;
-                UpdateUI(currentSession);
                 currentSession.OnSongChanged += CurrentSession_OnSongChanged;
                 currentSession.OnPlaybackStateChanged += CurrentSession_OnPlaybackStateChanged;
                 CurrentSession_OnPlaybackStateChanged(currentSession);
@@ -108,10 +107,15 @@ namespace Sample.UI
 
         private void UpdateUI(MediaSession mediaSession)
         {
-            if (mediaSession.ControlSession.GetPlaybackInfo().Controls.IsPauseEnabled)
-                ControlPlayPause.Content = "II";
-            else
-                ControlPlayPause.Content = "▶️";
+            var mediaProp = mediaSession.ControlSession.GetPlaybackInfo();
+            if (mediaProp != null)
+            {
+                if (mediaSession.ControlSession.GetPlaybackInfo().Controls.IsPauseEnabled)
+                    ControlPlayPause.Content = "II";
+                else
+                    ControlPlayPause.Content = "▶️";
+                ControlBack.IsEnabled = ControlForward.IsEnabled = mediaProp.Controls.IsNextEnabled;
+            }
 
             var songInfo = mediaSession.ControlSession.TryGetMediaPropertiesAsync().GetAwaiter().GetResult();
             if(songInfo != null)
@@ -121,8 +125,6 @@ namespace Sample.UI
                 SongImage.Source = Helper.GetThumbnail(songInfo.Thumbnail);
             }
 
-            var mediaProp = mediaSession.ControlSession.GetPlaybackInfo();
-            ControlBack.IsEnabled = ControlForward.IsEnabled = mediaProp.Controls.IsNextEnabled;
         }
 
         private async void Back_Click(object sender, RoutedEventArgs e)
