@@ -11,11 +11,19 @@
     <RepositoryUrl>https://github.com/DubyaDude/WindowsMediaController/tree/master/WindowsMediaController</RepositoryUrl>
     <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
     <ApplicationIcon>Icon.ico</ApplicationIcon>
+    <Description>Allows developers to more easily get information from and interact with the Windows 10/11 OS media interface. 
+Allows Playback Control on individual Media Sessions (Spotify, Chrome etc), Getting media information of currently playing (Song, Author, Thumbnail etc), and more</Description>
+    <PackageIcon>Icon.png</PackageIcon>
+    <PackageTags>music;audio;media;controller;windows;windows10;windows11</PackageTags>
   </PropertyGroup>
   <ItemGroup>
     <Content Include="Icon.ico" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\docs\images\Icon.png">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
     <None Include="..\README.md">
       <Pack>True</Pack>
       <PackagePath>\</PackagePath>
