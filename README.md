@@ -26,6 +26,6 @@ UNDER CONSTRUCTION
 
 
 ## Credit
-- Luca Marini ([gitlab](https://gitlab.com/naatiivee)) - For helping me understand the Windows API to be able to create the wrapper
+- Luca Marini ([gitlab](https://gitlab.com/naatiivee)) - Helped me understand the Windows API
 - Google ([materialui](https://github.com/google/material-design-icons)) - Utilizing their play icon to create our icon
 - Kinnara ([ModernWpf](https://github.com/Kinnara/ModernWpf)) - Utilized the ModernWpf library to creat the UI sample
