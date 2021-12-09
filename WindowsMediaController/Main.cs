@@ -71,7 +71,7 @@ namespace WindowsMediaController
                 {
                     MediaSession mediaSession = new MediaSession(controlSession, this);
                     CurrentMediaSessions[controlSession.SourceAppUserModelId] = mediaSession;
-                    OnAnyNewSource?.Invoke(mediaSession);
+                    try { OnAnyNewSource?.Invoke(mediaSession); } catch { }
                     mediaSession.OnSongChange(controlSession);
                 }
             }
@@ -192,7 +192,7 @@ namespace WindowsMediaController
                 ControlSession.PlaybackInfoChanged -= OnPlaybackInfoChanged;
                 ControlSession.MediaPropertiesChanged -= OnSongChange;
                 try { OnRemovedSource?.Invoke(this); } catch { }
-                try { MediaManagerInstance.RemoveSource(this); } catch { }
+                MediaManagerInstance.RemoveSource(this);
             }
         }
     }
