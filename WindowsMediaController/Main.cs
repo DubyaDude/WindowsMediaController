@@ -105,7 +105,7 @@ namespace WindowsMediaController
 
         private void RemoveSource(MediaSession mediaSession)
         {
-            _CurrentMediaSessions.Remove(mediaSession.ControlSession.SourceAppUserModelId);
+            _CurrentMediaSessions.Remove(mediaSession.Id);
             try { OnAnyRemovedSource?.Invoke(mediaSession); } catch { }
         }
 
@@ -119,7 +119,7 @@ namespace WindowsMediaController
             List<string> keys = CurrentMediaSessions.Keys.ToList();
             foreach(var key in keys)
             {
-                CurrentMediaSessions[key].Dispose(false);
+                CurrentMediaSessions[key].Dispose();
             }
             _CurrentMediaSessions?.Clear();
 
@@ -128,7 +128,7 @@ namespace WindowsMediaController
             _WindowsSessionManager = null;
         }
 
-        public class MediaSession : IDisposable
+        public class MediaSession
         {
             /// <summary>
             /// Triggered when a playback state changes of the <c>MediaSession</c>
@@ -152,12 +152,20 @@ namespace WindowsMediaController
             public GlobalSystemMediaTransportControlsSession ControlSession { get => _ControlSession; }
             private GlobalSystemMediaTransportControlsSession _ControlSession;
 
+            /// <summary>
+            /// The Unique Id of the <c>MediaSession</c>, grabbed from <c>GlobalSystemMediaTransportControlsSession.SourceAppUserModelId</c> from the Windows library
+            /// </summary>
+            /// <seealso href="https://docs.microsoft.com/en-us/uwp/api/windows.media.control.globalsystemmediatransportcontrolssession.sourceappusermodelid"/>
+            public string Id { get => _Id; }
+            private string _Id;
+
             internal MediaManager MediaManagerInstance;
 
             internal MediaSession(GlobalSystemMediaTransportControlsSession controlSession, MediaManager mediaMangerInstance)
             {
                 MediaManagerInstance = mediaMangerInstance;
                 _ControlSession = controlSession;
+                _Id = _ControlSession.SourceAppUserModelId;
                 _ControlSession.MediaPropertiesChanged += OnSongChange;
                 _ControlSession.PlaybackInfoChanged += OnPlaybackInfoChanged;
             }
@@ -167,12 +175,7 @@ namespace WindowsMediaController
             {
                 var playbackInfo = controlSession.GetPlaybackInfo();
 
-                //If Session reports it closed, self destruct
-                if (playbackInfo.PlaybackStatus == GlobalSystemMediaTransportControlsSessionPlaybackStatus.Closed)
-                {
-                    Dispose();
-                }
-                else
+                if (playbackInfo.PlaybackStatus != GlobalSystemMediaTransportControlsSessionPlaybackStatus.Closed)
                 {
                     try { OnPlaybackStateChanged?.Invoke(this, playbackInfo); } catch { }
                     try { MediaManagerInstance.OnAnyPlaybackStateChanged?.Invoke(this, playbackInfo); } catch { }
@@ -187,7 +190,7 @@ namespace WindowsMediaController
                 try { MediaManagerInstance.OnAnySongChanged?.Invoke(this, mediaProperties); } catch { }
             }
 
-            internal void Dispose(bool removeFromList)
+            internal void Dispose()
             {
                 OnPlaybackStateChanged = null;
                 OnSongChanged = null;
@@ -196,13 +199,6 @@ namespace WindowsMediaController
                 _ControlSession.MediaPropertiesChanged -= OnSongChange;
                 _ControlSession = null;
                 try { OnRemovedSource?.Invoke(this); } catch { }
-                if(removeFromList)
-                    MediaManagerInstance.RemoveSource(this);
-            }
-
-            public void Dispose()
-            {
-                Dispose(true);
             }
         }
     }

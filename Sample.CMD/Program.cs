@@ -33,21 +33,21 @@ namespace Sample.CMD
 
         private static void MediaManager_OnNewSource(MediaManager.MediaSession session)
         {
-            WriteLineColor("-- New Source: " + session.ControlSession.SourceAppUserModelId, ConsoleColor.Green);
+            WriteLineColor("-- New Source: " + session.Id, ConsoleColor.Green);
         }
         private static void MediaManager_OnRemovedSource(MediaManager.MediaSession session)
         {
-            WriteLineColor("-- Removed Source: " + session.ControlSession.SourceAppUserModelId, ConsoleColor.Red);
+            WriteLineColor("-- Removed Source: " + session.Id, ConsoleColor.Red);
         }
 
         private static void MediaManager_OnSongChanged(MediaManager.MediaSession sender, GlobalSystemMediaTransportControlsSessionMediaProperties args)
         {
-            WriteLineColor($"{sender.ControlSession.SourceAppUserModelId} is now playing {args.Title} {(String.IsNullOrEmpty(args.Artist) ? "" : $"by {args.Artist}")}", ConsoleColor.Cyan);
+            WriteLineColor($"{sender.Id} is now playing {args.Title} {(String.IsNullOrEmpty(args.Artist) ? "" : $"by {args.Artist}")}", ConsoleColor.Cyan);
         }
 
         private static void MediaManager_OnPlaybackStateChanged(MediaManager.MediaSession sender, GlobalSystemMediaTransportControlsSessionPlaybackInfo args)
         {
-            WriteLineColor($"{sender.ControlSession.SourceAppUserModelId} is now {args.PlaybackStatus}", ConsoleColor.Yellow);
+            WriteLineColor($"{sender.Id} is now {args.PlaybackStatus}", ConsoleColor.Yellow);
         }
 
 
