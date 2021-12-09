@@ -54,13 +54,14 @@ namespace Sample.UI
         {
             Application.Current.Dispatcher.Invoke(() =>
             {
-                List<NavigationViewItem?> itemsToRemove = new List<NavigationViewItem?>();
+                NavigationViewItem? itemToRemove = null;
 
                 foreach (NavigationViewItem? item in SongList.MenuItems)
                         if (item?.Content.ToString() == session.Id)
-                            itemsToRemove.Add(item);
+                            itemToRemove = item;
 
-                itemsToRemove.ForEach(x => SongList.MenuItems.Remove(x));
+                if(itemToRemove != null)
+                    SongList.MenuItems.Remove(itemToRemove);
             });
         }
 
