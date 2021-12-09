@@ -37,7 +37,7 @@ namespace WindowsMediaController
         /// A dictionary of the current <c>(string MediaSessionIds, MediaSession MediaSessionInstance)</c>
         /// </summary>
         public ReadOnlyDictionary<string, MediaSession> CurrentMediaSessions => new ReadOnlyDictionary<string, MediaSession>(_CurrentMediaSessions);
-        private Dictionary<string, MediaSession> _CurrentMediaSessions = new Dictionary<string, MediaSession>();
+        private readonly Dictionary<string, MediaSession> _CurrentMediaSessions = new Dictionary<string, MediaSession>();
 
         /// <summary>
         /// Tells if <c>MediaManager</c> has started
@@ -161,8 +161,7 @@ namespace WindowsMediaController
             /// The Unique Id of the <c>MediaSession</c>, grabbed from <c>GlobalSystemMediaTransportControlsSession.SourceAppUserModelId</c> from the Windows library
             /// </summary>
             /// <seealso href="https://docs.microsoft.com/en-us/uwp/api/windows.media.control.globalsystemmediatransportcontrolssession.sourceappusermodelid"/>
-            public string Id { get => _Id; }
-            private string _Id;
+            public readonly string Id;
 
             internal MediaManager MediaManagerInstance;
 
@@ -170,7 +169,7 @@ namespace WindowsMediaController
             {
                 MediaManagerInstance = mediaMangerInstance;
                 _ControlSession = controlSession;
-                _Id = _ControlSession.SourceAppUserModelId;
+                Id = _ControlSession.SourceAppUserModelId;
                 _ControlSession.MediaPropertiesChanged += OnSongChange;
                 _ControlSession.PlaybackInfoChanged += OnPlaybackInfoChanged;
             }

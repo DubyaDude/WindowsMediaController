@@ -28,8 +28,6 @@ namespace Sample.CMD
             Console.ReadLine();
             mediaManager.Dispose();
         }
-        private static async Task InfTask() => await Task.Delay(-1);
-
 
         private static void MediaManager_OnNewSource(MediaManager.MediaSession session)
         {

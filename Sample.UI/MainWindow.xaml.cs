@@ -25,7 +25,7 @@ namespace Sample.UI
     /// </summary>
     public partial class MainWindow : Window
     {
-        private static MediaManager mediaManager = new MediaManager();
+        private static readonly MediaManager mediaManager = new MediaManager();
         private static MediaSession? currentSession = null;
 
         public MainWindow()
@@ -42,10 +42,12 @@ namespace Sample.UI
         {
             Application.Current.Dispatcher.Invoke(() =>
             {
-                var menuItem = new NavigationViewItem();
-                menuItem.Content = mediaSession.Id;
-                menuItem.Icon = new SymbolIcon() { Symbol = Symbol.Audio };
-                menuItem.Tag = mediaSession;
+                var menuItem = new NavigationViewItem
+                {
+                    Content = mediaSession.Id,
+                    Icon = new SymbolIcon() { Symbol = Symbol.Audio },
+                    Tag = mediaSession
+                };
                 SongList.MenuItems.Add(menuItem);
             });
         }
