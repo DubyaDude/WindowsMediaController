@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using WindowsMediaController;
 using Windows.Media.Control;
 
-namespace Tester
+namespace Sample.CMD
 {
     class Program
     {

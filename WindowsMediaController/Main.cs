@@ -191,7 +191,7 @@ namespace WindowsMediaController
                 OnRemovedSource = null;
                 ControlSession.PlaybackInfoChanged -= OnPlaybackInfoChanged;
                 ControlSession.MediaPropertiesChanged -= OnSongChange;
-                try { OnRemovedSource.Invoke(this); } catch { }
+                try { OnRemovedSource?.Invoke(this); } catch { }
                 try { MediaManagerInstance.RemoveSource(this); } catch { }
             }
         }
