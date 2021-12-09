@@ -1,14 +1,27 @@
-# WindowsMediaController
-This is a simple wrapper for the Windows 10 Media Sessions Controller.
+# Windows Media Controller
+This repository allows developers to more easily get information from and interact with the Windows 10/11 OS media interface. 
 
-![Image of Yaktocat](https://i.imgur.com/tNykmKW.png)
+![Windows 10 Media Interface](https://raw.githubusercontent.com/DubyaDude/WindowsMediaController/master/docs/images/Win10.png)
 
-This allows for a better understanding and control of the Media Sessions and can have many different applications.
-- Controlling on a per-media basis rather then depending on emulating media keyboard keys.
-- Getting currently playing music title, author and even artwork.
-- Knowing when a Media source open/closes.
+This allows for a better understanding and control of the Media Sessions and can have many different applications. Some features include:
+- Control playback on individual Media Sessions (Spotify, Chrome etc)
+- Get media information of currently playing (Song, Author, Thumbnail etc)
 
+## Requirements
+- Windows 10 (Build 17763+) or Windows 11
+- The ability to talk to Windows Runtime. (In a majority of cases, this will not be an issue)
 
+## How To Use
+UNDER CONSTRUCTION
+  
+## Samples
+- Sample.CMD - A very barebone console application for developers to get a feel of how their usecase might act.
+
+![Sample.CMD](https://raw.githubusercontent.com/DubyaDude/WindowsMediaController/master/docs/images/Sample.CMD.png)
+
+- Sample.UI - A WPF media controller
+
+![Sample.UI](https://raw.githubusercontent.com/DubyaDude/WindowsMediaController/master/docs/images/Sample.UI.png)
 
 
 ## Credit
