@@ -13,24 +13,24 @@ namespace WindowsMediaController
         public delegate void SongChangeDelegate(MediaSession session, GlobalSystemMediaTransportControlsSessionMediaProperties mediaProperties);
 
         /// <summary>
-        /// Triggered when a new media source gets added to the MediaSessions
+        /// Triggered when a new media source gets added to the Current MediaSessions
         /// </summary>
-        public event SourceChangeDelegate OnNewSource;
+        public event SourceChangeDelegate OnAnyNewSource;
 
         /// <summary>
-        /// Triggered when a media source gets removed from the MediaSessions
+        /// Triggered when a media source gets removed from the Current MediaSessions
         /// </summary>
-        public event SourceChangeDelegate OnRemovedSource;
+        public event SourceChangeDelegate OnAnyRemovedSource;
 
         /// <summary>
-        /// Triggered when a playback state changes of a MediaSession
+        /// Triggered when a playback state changes of any MediaSession
         /// </summary>
-        public event PlaybackChangeDelegate OnPlaybackStateChanged;
+        public event PlaybackChangeDelegate OnAnyPlaybackStateChanged;
 
         /// <summary>
-        /// Triggered when a song changes of a MediaSession
+        /// Triggered when a song changes of any MediaSession
         /// </summary>
-        public event SongChangeDelegate OnSongChanged;
+        public event SongChangeDelegate OnAnySongChanged;
         
         /// <summary>
         /// A dictionary of the current MediaSessions
@@ -71,7 +71,7 @@ namespace WindowsMediaController
                 {
                     MediaSession mediaSession = new MediaSession(controlSession, this);
                     CurrentMediaSessions[controlSession.SourceAppUserModelId] = mediaSession;
-                    OnNewSource?.Invoke(mediaSession);
+                    OnAnyNewSource?.Invoke(mediaSession);
                     mediaSession.OnSongChange(controlSession);
                 }
             }
@@ -94,8 +94,8 @@ namespace WindowsMediaController
 
         private void RemoveSource(MediaSession mediaSession)
         {
-            CurrentMediaSessions.Remove(mediaSession.ControlSession.SourceAppUserModelId); 
-            OnRemovedSource?.Invoke(mediaSession);
+            CurrentMediaSessions.Remove(mediaSession.ControlSession.SourceAppUserModelId);
+            try { OnAnyRemovedSource?.Invoke(mediaSession); } catch { }
         }
 
         public void StopAndReset() 
@@ -112,10 +112,10 @@ namespace WindowsMediaController
 
         public void Dispose()
         {
-            OnNewSource = null;
-            OnRemovedSource = null;
-            OnSongChanged = null;
-            OnPlaybackStateChanged = null;
+            OnAnyNewSource = null;
+            OnAnyRemovedSource = null;
+            OnAnySongChanged = null;
+            OnAnyPlaybackStateChanged = null;
 
             foreach (var mediaSession in CurrentMediaSessions)
             {
@@ -130,6 +130,25 @@ namespace WindowsMediaController
 
         public class MediaSession : IDisposable
         {
+            /// <summary>
+            /// Triggered when a playback state changes of the MediaSession
+            /// </summary>
+            public event PlaybackChangeDelegate OnPlaybackStateChanged;
+
+            /// <summary>
+            /// Triggered when a song changes of the MediaSession
+            /// </summary>
+            public event SongChangeDelegate OnSongChanged;
+
+
+            /// <summary>
+            /// Triggered when this media source gets removed from the Current MediaSessions
+            /// </summary>
+            public event SourceChangeDelegate OnRemovedSource;
+
+            /// <summary>
+            /// The Windows media control session
+            /// </summary>
             public GlobalSystemMediaTransportControlsSession ControlSession;
             internal MediaManager MediaManagerInstance;
 
@@ -152,20 +171,28 @@ namespace WindowsMediaController
                 }
                 else
                 {
-                    MediaManagerInstance.OnPlaybackStateChanged?.Invoke(this, playbackInfo);
+                    try { OnPlaybackStateChanged?.Invoke(this, playbackInfo); } catch { }
+                    try { MediaManagerInstance.OnAnyPlaybackStateChanged?.Invoke(this, playbackInfo); } catch { }
                 }
             }
 
             internal async void OnSongChange(GlobalSystemMediaTransportControlsSession controlSession, MediaPropertiesChangedEventArgs args = null)
             {
-                MediaManagerInstance.OnSongChanged?.Invoke(this, await controlSession.TryGetMediaPropertiesAsync());
+                var mediaProperties = await controlSession.TryGetMediaPropertiesAsync();
+
+                try { OnSongChanged?.Invoke(this, mediaProperties); } catch { }
+                try { MediaManagerInstance.OnAnySongChanged?.Invoke(this, mediaProperties); } catch { }
             }
 
             public void Dispose()
             {
+                OnPlaybackStateChanged = null;
+                OnSongChanged = null;
+                OnRemovedSource = null;
                 ControlSession.PlaybackInfoChanged -= OnPlaybackInfoChanged;
                 ControlSession.MediaPropertiesChanged -= OnSongChange;
-                MediaManagerInstance.RemoveSource(this);
+                try { OnRemovedSource.Invoke(this); } catch { }
+                try { MediaManagerInstance.RemoveSource(this); } catch { }
             }
         }
     }

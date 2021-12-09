@@ -19,10 +19,10 @@ namespace Tester
         {
             mediaManager = new MediaManager();
 
-            mediaManager.OnNewSource += MediaManager_OnNewSource;
-            mediaManager.OnRemovedSource += MediaManager_OnRemovedSource;
-            mediaManager.OnPlaybackStateChanged += MediaManager_OnPlaybackStateChanged;
-            mediaManager.OnSongChanged += MediaManager_OnSongChanged;
+            mediaManager.OnAnyNewSource += MediaManager_OnNewSource;
+            mediaManager.OnAnyRemovedSource += MediaManager_OnRemovedSource;
+            mediaManager.OnAnyPlaybackStateChanged += MediaManager_OnPlaybackStateChanged;
+            mediaManager.OnAnySongChanged += MediaManager_OnSongChanged;
             await mediaManager.Start();
 
             InfTask().GetAwaiter().GetResult();
