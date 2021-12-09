@@ -25,7 +25,7 @@ namespace Sample.CMD
             mediaManager.OnAnySongChanged += MediaManager_OnSongChanged;
             await mediaManager.Start();
 
-            InfTask().GetAwaiter().GetResult();
+            Console.ReadLine();
             mediaManager.Dispose();
         }
         private static async Task InfTask() => await Task.Delay(-1);

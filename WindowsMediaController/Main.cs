@@ -117,9 +117,10 @@ namespace WindowsMediaController
             OnAnySongChanged = null;
             OnAnyPlaybackStateChanged = null;
 
-            foreach (var mediaSession in CurrentMediaSessions)
+            List<string> keys = CurrentMediaSessions.Keys.ToList();
+            foreach(var key in keys)
             {
-                mediaSession.Value.Dispose();
+                CurrentMediaSessions[key].Dispose(false);
             }
             CurrentMediaSessions?.Clear();
 
@@ -184,7 +185,7 @@ namespace WindowsMediaController
                 try { MediaManagerInstance.OnAnySongChanged?.Invoke(this, mediaProperties); } catch { }
             }
 
-            public void Dispose()
+            internal void Dispose(bool removeFromList)
             {
                 OnPlaybackStateChanged = null;
                 OnSongChanged = null;
@@ -192,7 +193,13 @@ namespace WindowsMediaController
                 ControlSession.PlaybackInfoChanged -= OnPlaybackInfoChanged;
                 ControlSession.MediaPropertiesChanged -= OnSongChange;
                 try { OnRemovedSource?.Invoke(this); } catch { }
-                MediaManagerInstance.RemoveSource(this);
+                if(removeFromList)
+                    MediaManagerInstance.RemoveSource(this);
+            }
+
+            public void Dispose()
+            {
+                Dispose(true);
             }
         }
     }
