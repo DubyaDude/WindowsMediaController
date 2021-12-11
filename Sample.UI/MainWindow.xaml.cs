@@ -71,7 +71,7 @@ namespace Sample.UI
         {
             if(currentSession != null)
             {
-                currentSession.OnSongChanged -= CurrentSession_OnSongChanged;
+                currentSession.OnMediaPropertyChanged -= CurrentSession_OnMediaPropertyChanged;
                 currentSession.OnPlaybackStateChanged -= CurrentSession_OnPlaybackStateChanged;
                 currentSession = null;
             }
@@ -79,7 +79,7 @@ namespace Sample.UI
             if(navView.SelectedItem != null)
             {
                 currentSession = (MediaSession)((NavigationViewItem)navView.SelectedItem).Tag;
-                currentSession.OnSongChanged += CurrentSession_OnSongChanged;
+                currentSession.OnMediaPropertyChanged += CurrentSession_OnMediaPropertyChanged;
                 currentSession.OnPlaybackStateChanged += CurrentSession_OnPlaybackStateChanged;
                 CurrentSession_OnPlaybackStateChanged(currentSession);
             }
@@ -100,7 +100,7 @@ namespace Sample.UI
             });
         }
 
-        private void CurrentSession_OnSongChanged(MediaSession mediaSession, GlobalSystemMediaTransportControlsSessionMediaProperties mediaProperties)
+        private void CurrentSession_OnMediaPropertyChanged(MediaSession mediaSession, GlobalSystemMediaTransportControlsSessionMediaProperties mediaProperties)
         {
             Application.Current.Dispatcher.Invoke(() =>
             {

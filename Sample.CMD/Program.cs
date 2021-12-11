@@ -22,7 +22,7 @@ namespace Sample.CMD
             mediaManager.OnAnySessionOpened += MediaManager_OnAnySessionOpened;
             mediaManager.OnAnySessionClosed += MediaManager_OnAnySessionClosed;
             mediaManager.OnAnyPlaybackStateChanged += MediaManager_OnAnyPlaybackStateChanged;
-            mediaManager.OnAnySongChanged += MediaManager_OnAnySongChanged;
+            mediaManager.OnAnyMediaPropertyChanged += MediaManager_OnAnyMediaPropertyChanged;
 
             await mediaManager.Start();
 
@@ -44,7 +44,7 @@ namespace Sample.CMD
             WriteLineColor($"{sender.Id} is now {args.PlaybackStatus}", ConsoleColor.Yellow);
         }
 
-        private static void MediaManager_OnAnySongChanged(MediaManager.MediaSession sender, GlobalSystemMediaTransportControlsSessionMediaProperties args)
+        private static void MediaManager_OnAnyMediaPropertyChanged(MediaManager.MediaSession sender, GlobalSystemMediaTransportControlsSessionMediaProperties args)
         {
             WriteLineColor($"{sender.Id} is now playing {args.Title} {(String.IsNullOrEmpty(args.Artist) ? "" : $"by {args.Artist}")}", ConsoleColor.Cyan);
         }
