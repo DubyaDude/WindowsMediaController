@@ -1,5 +1,5 @@
 # Windows Media Controller
-This repository allows developers to more easily get information from and interact with the Windows 10/11 OS media interface. 
+This repository provides a wrapper for developers to more easily get information from and interact with the Windows 10/11 OS media interface. 
 
 ![Windows 10 Media Interface](https://raw.githubusercontent.com/DubyaDude/WindowsMediaController/master/docs/images/Win10.png)
 
@@ -17,12 +17,34 @@ This allows for a better understanding and control of the Media Sessions and can
 ```csharp
 mediaManager = new MediaManager();
 
-mediaManager.OnAnyNewSource += MediaManager_OnAnyNewSource;
-mediaManager.OnAnyRemovedSource += MediaManager_OnAnyRemovedSource;
+mediaManager.OnAnySessionOpened += MediaManager_OnAnySessionOpened;
+mediaManager.OnAnySessionClosed += MediaManager_OnAnySessionClosed;
 mediaManager.OnAnyPlaybackStateChanged += MediaManager_OnAnyPlaybackStateChanged;
 mediaManager.OnAnySongChanged += MediaManager_OnAnySongChanged;
 
 await mediaManager.Start();
+```
+
+### Class Structure:
+MediaManager:
+```csharp
+ReadOnlyDictionary<string, MediaSession> CurrentMediaSessions;
+bool IsStarted { get; }
+GlobalSystemMediaTransportControlsSessionManager WindowsSessionManager { get; }
+
+delegate void OnAnySessionOpened(MediaManager.MediaSession session);
+delegate void OnAnySessionClosed(MediaManager.MediaSession session);
+delegate void OnAnySongChanged(MediaManager.MediaSession sender, GlobalSystemMediaTransportControlsSessionMediaProperties args);
+delegate void OnAnyPlaybackStateChanged(MediaManager.MediaSession sender, GlobalSystemMediaTransportControlsSessionPlaybackInfo args);
+```
+MediaManager.MediaSession:
+```csharp
+readonly string Id;
+GlobalSystemMediaTransportControlsSession ControlSession { get; }
+
+delegate void OnSessionClosed(MediaManager.MediaSession session);
+delegate void OnSongChanged(MediaManager.MediaSession sender, GlobalSystemMediaTransportControlsSessionMediaProperties args);
+delegate void OnPlaybackStateChanged(MediaManager.MediaSession sender, GlobalSystemMediaTransportControlsSessionPlaybackInfo args);
 ```
 
 ### Getting Some Info:
@@ -37,7 +59,7 @@ await mediaManager.Start();
 
 ### Useful Microsoft Documentations:
 - [GlobalSystemMediaTransportControlsSessionManager](https://docs.microsoft.com/en-us/uwp/api/windows.media.control.globalsystemmediatransportcontrolssessionmanager) - Located in `MediaManager.WindowsSessionManager`. This class allows for events whenever a source's state changes.
-- [GlobalSystemMediaTransportControlsSession](https://docs.microsoft.com/en-us/uwp/api/windows.media.control.globalsystemmediatransportcontrolssession) - Located in `MediaManager.MediaSession.ControlSession`. The Media Session that allows for events whenever the playback state or the media property changes. 
+- [GlobalSystemMediaTransportControlsSession](https://docs.microsoft.com/en-us/uwp/api/windows.media.control.globalsystemmediatransportcontrolssession) - Located in `MediaManager.MediaSession.ControlSession`. The Media Session that allows for events whenever the playback state or the media property changes as well as to grab such info whenever desired.
 
   
 ## Samples
