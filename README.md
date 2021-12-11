@@ -1,4 +1,6 @@
 # Windows Media Controller
+[![NuGet](https://img.shields.io/nuget/vpre/Dubya.WindowsMediaController.svg)](https://nuget.org/packages/Dubya.WindowsMediaController)
+
 This repository provides a wrapper for developers to more easily get information from and interact with the Windows 10/11 OS media interface. 
 
 ![Windows 10 Media Interface](https://raw.githubusercontent.com/DubyaDude/WindowsMediaController/master/docs/images/Win10.png)
