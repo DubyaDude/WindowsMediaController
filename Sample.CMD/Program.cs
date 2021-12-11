@@ -19,33 +19,34 @@ namespace Sample.CMD
         {
             mediaManager = new MediaManager();
 
-            mediaManager.OnAnyNewSource += MediaManager_OnNewSource;
-            mediaManager.OnAnyRemovedSource += MediaManager_OnRemovedSource;
-            mediaManager.OnAnyPlaybackStateChanged += MediaManager_OnPlaybackStateChanged;
-            mediaManager.OnAnySongChanged += MediaManager_OnSongChanged;
+            mediaManager.OnAnySessionOpened += MediaManager_OnAnySessionOpened;
+            mediaManager.OnAnySessionClosed += MediaManager_OnAnySessionClosed;
+            mediaManager.OnAnyPlaybackStateChanged += MediaManager_OnAnyPlaybackStateChanged;
+            mediaManager.OnAnySongChanged += MediaManager_OnAnySongChanged;
+
             await mediaManager.Start();
 
             Console.ReadLine();
             mediaManager.Dispose();
         }
 
-        private static void MediaManager_OnNewSource(MediaManager.MediaSession session)
+        private static void MediaManager_OnAnySessionOpened(MediaManager.MediaSession session)
         {
             WriteLineColor("-- New Source: " + session.Id, ConsoleColor.Green);
         }
-        private static void MediaManager_OnRemovedSource(MediaManager.MediaSession session)
+        private static void MediaManager_OnAnySessionClosed(MediaManager.MediaSession session)
         {
             WriteLineColor("-- Removed Source: " + session.Id, ConsoleColor.Red);
         }
 
-        private static void MediaManager_OnSongChanged(MediaManager.MediaSession sender, GlobalSystemMediaTransportControlsSessionMediaProperties args)
-        {
-            WriteLineColor($"{sender.Id} is now playing {args.Title} {(String.IsNullOrEmpty(args.Artist) ? "" : $"by {args.Artist}")}", ConsoleColor.Cyan);
-        }
-
-        private static void MediaManager_OnPlaybackStateChanged(MediaManager.MediaSession sender, GlobalSystemMediaTransportControlsSessionPlaybackInfo args)
+        private static void MediaManager_OnAnyPlaybackStateChanged(MediaManager.MediaSession sender, GlobalSystemMediaTransportControlsSessionPlaybackInfo args)
         {
             WriteLineColor($"{sender.Id} is now {args.PlaybackStatus}", ConsoleColor.Yellow);
+        }
+
+        private static void MediaManager_OnAnySongChanged(MediaManager.MediaSession sender, GlobalSystemMediaTransportControlsSessionMediaProperties args)
+        {
+            WriteLineColor($"{sender.Id} is now playing {args.Title} {(String.IsNullOrEmpty(args.Artist) ? "" : $"by {args.Artist}")}", ConsoleColor.Cyan);
         }
 
 

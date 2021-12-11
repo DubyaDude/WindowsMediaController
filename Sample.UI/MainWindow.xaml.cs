@@ -32,13 +32,13 @@ namespace Sample.UI
         {
             InitializeComponent();
 
-            mediaManager.OnAnyNewSource += MediaManager_OnAnyNewSource;
-            mediaManager.OnAnyRemovedSource += MediaManager_OnAnyRemovedSource;
+            mediaManager.OnAnySessionOpened += MediaManager_OnAnySessionOpened;
+            mediaManager.OnAnySessionClosed += MediaManager_OnAnySessionClosed;
 
             mediaManager.Start().GetAwaiter().GetResult();
         }
 
-        private void MediaManager_OnAnyNewSource(MediaSession mediaSession)
+        private void MediaManager_OnAnySessionOpened(MediaSession mediaSession)
         {
             Application.Current.Dispatcher.Invoke(() =>
             {
@@ -52,7 +52,7 @@ namespace Sample.UI
             });
         }
 
-        private void MediaManager_OnAnyRemovedSource(MediaSession session)
+        private void MediaManager_OnAnySessionClosed(MediaSession session)
         {
             Application.Current.Dispatcher.Invoke(() =>
             {

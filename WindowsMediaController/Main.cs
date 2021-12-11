@@ -9,19 +9,19 @@ namespace WindowsMediaController
 {
     public class MediaManager : IDisposable
     {
-        public delegate void SourceChangeDelegate(MediaSession session);
-        public delegate void PlaybackChangeDelegate(MediaSession session, GlobalSystemMediaTransportControlsSessionPlaybackInfo playbackInfo);
-        public delegate void SongChangeDelegate(MediaSession session, GlobalSystemMediaTransportControlsSessionMediaProperties mediaProperties);
+        public delegate void SessionChangeDelegate(MediaSession mediaSession);
+        public delegate void PlaybackChangeDelegate(MediaSession mediaSession, GlobalSystemMediaTransportControlsSessionPlaybackInfo playbackInfo);
+        public delegate void SongChangeDelegate(MediaSession mediaSession, GlobalSystemMediaTransportControlsSessionMediaProperties mediaProperties);
 
         /// <summary>
         /// Triggered when a new media source gets added to the <c>CurrentMediaSessions</c> dictionary
         /// </summary>
-        public event SourceChangeDelegate OnAnyNewSource;
+        public event SessionChangeDelegate OnAnySessionOpened;
 
         /// <summary>
         /// Triggered when a media source gets removed from the <c>CurrentMediaSessions</c> dictionary
         /// </summary>
-        public event SourceChangeDelegate OnAnyRemovedSource;
+        public event SessionChangeDelegate OnAnySessionClosed;
 
         /// <summary>
         /// Triggered when a playback state changes of any <c>MediaSession</c>
@@ -82,7 +82,7 @@ namespace WindowsMediaController
                 {
                     MediaSession mediaSession = new MediaSession(controlSession, this);
                     _CurrentMediaSessions[controlSession.SourceAppUserModelId] = mediaSession;
-                    try { OnAnyNewSource?.Invoke(mediaSession); } catch { }
+                    try { OnAnySessionOpened?.Invoke(mediaSession); } catch { }
                     mediaSession.OnSongChange(controlSession);
                 }
             }
@@ -108,7 +108,7 @@ namespace WindowsMediaController
             if (_CurrentMediaSessions.ContainsKey(mediaSession.Id))
             {
                 _CurrentMediaSessions.Remove(mediaSession.Id);
-                try { OnAnyRemovedSource?.Invoke(mediaSession); } catch { }
+                try { OnAnySessionClosed?.Invoke(mediaSession); } catch { }
                 return true;
             }
             return false;
@@ -116,8 +116,8 @@ namespace WindowsMediaController
 
         public void Dispose()
         {
-            OnAnyNewSource = null;
-            OnAnyRemovedSource = null;
+            OnAnySessionOpened = null;
+            OnAnySessionClosed = null;
             OnAnySongChanged = null;
             OnAnyPlaybackStateChanged = null;
 
@@ -136,6 +136,11 @@ namespace WindowsMediaController
         public class MediaSession
         {
             /// <summary>
+            /// Triggered when this media source gets removed from the <c>CurrentMediaSessions</c> dictionary
+            /// </summary>
+            public event SessionChangeDelegate OnSessionClosed;
+
+            /// <summary>
             /// Triggered when a playback state changes of the <c>MediaSession</c>
             /// </summary>
             public event PlaybackChangeDelegate OnPlaybackStateChanged;
@@ -144,11 +149,6 @@ namespace WindowsMediaController
             /// Triggered when a song changes of the <c>MediaSession</c>
             /// </summary>
             public event SongChangeDelegate OnSongChanged;
-
-            /// <summary>
-            /// Triggered when this media source gets removed from the <c>CurrentMediaSessions</c> dictionary
-            /// </summary>
-            public event SourceChangeDelegate OnRemovedSource;
 
             /// <summary>
             /// The GlobalSystemMediaTransportControlsSession component from the Windows library
@@ -204,11 +204,11 @@ namespace WindowsMediaController
                 {
                     OnPlaybackStateChanged = null;
                     OnSongChanged = null;
-                    OnRemovedSource = null;
+                    OnSessionClosed = null;
                     _ControlSession.PlaybackInfoChanged -= OnPlaybackInfoChanged;
                     _ControlSession.MediaPropertiesChanged -= OnSongChange;
                     _ControlSession = null;
-                    try { OnRemovedSource?.Invoke(this); } catch { }
+                    try { OnSessionClosed?.Invoke(this); } catch { }
                 }
             }
         }
