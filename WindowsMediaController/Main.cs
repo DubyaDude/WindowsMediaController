@@ -55,12 +55,12 @@ namespace WindowsMediaController
         /// <summary>
         /// This starts the <c>MediaManager</c>
         /// </summary>
-        public async Task Start()
+        public void Start()
         {
             if (!_IsStarted)
             {
                 //Populate CurrentMediaSessions with already open Sessions
-                _WindowsSessionManager = await GlobalSystemMediaTransportControlsSessionManager.RequestAsync();
+                _WindowsSessionManager = GlobalSystemMediaTransportControlsSessionManager.RequestAsync().GetAwaiter().GetResult();
                 SessionsChanged(_WindowsSessionManager);
                 _WindowsSessionManager.SessionsChanged += SessionsChanged;
                 _IsStarted = true;

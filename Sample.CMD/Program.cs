@@ -13,9 +13,6 @@ namespace Sample.CMD
         static MediaManager mediaManager;
 
         public static void Main()
-            => Start().GetAwaiter().GetResult();
-
-        static async Task Start()
         {
             mediaManager = new MediaManager();
 
@@ -24,7 +21,7 @@ namespace Sample.CMD
             mediaManager.OnAnyPlaybackStateChanged += MediaManager_OnAnyPlaybackStateChanged;
             mediaManager.OnAnyMediaPropertyChanged += MediaManager_OnAnyMediaPropertyChanged;
 
-            await mediaManager.Start();
+            mediaManager.Start();
 
             Console.ReadLine();
             mediaManager.Dispose();

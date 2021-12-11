@@ -35,7 +35,7 @@ namespace Sample.UI
             mediaManager.OnAnySessionOpened += MediaManager_OnAnySessionOpened;
             mediaManager.OnAnySessionClosed += MediaManager_OnAnySessionClosed;
 
-            mediaManager.Start().GetAwaiter().GetResult();
+            mediaManager.Start();
         }
 
         private void MediaManager_OnAnySessionOpened(MediaSession mediaSession)
