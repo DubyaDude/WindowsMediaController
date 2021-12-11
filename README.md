@@ -4,8 +4,8 @@ This repository allows developers to more easily get information from and intera
 ![Windows 10 Media Interface](https://raw.githubusercontent.com/DubyaDude/WindowsMediaController/master/docs/images/Win10.png)
 
 This allows for a better understanding and control of the Media Sessions and can have many different applications. Some features include:
-- Control playback on individual Media Sessions (Spotify, Chrome etc)
-- Get media information of currently playing (Song, Author, Thumbnail etc)
+- Control playback on individual Media Sessions (Spotify, Chrome, etc)
+- Get media information of currently playing (Song, Author, Thumbnail, etc)
 
 ## Requirements
 - Windows 10 (Build 17763+) or Windows 11
@@ -16,7 +16,7 @@ This allows for a better understanding and control of the Media Sessions and can
 UNDER CONSTRUCTION
   
 ## Samples
-- Sample.CMD - A very barebone console application for developers to get a feel of how their usecase might act.
+- Sample.CMD - A very barebone console application for developers to get a feel of how their use-case might act.
 
 ![Sample.CMD](https://raw.githubusercontent.com/DubyaDude/WindowsMediaController/master/docs/images/Sample.CMD.png)
 
@@ -28,4 +28,4 @@ UNDER CONSTRUCTION
 ## Credit
 - Luca Marini ([gitlab](https://gitlab.com/naatiivee)) - Helped me understand the Windows API
 - Google ([materialui](https://github.com/google/material-design-icons)) - Utilizing their play icon to create our icon
-- Kinnara ([ModernWpf](https://github.com/Kinnara/ModernWpf)) - Utilized the ModernWpf library to creat the UI sample
+- Kinnara ([ModernWpf](https://github.com/Kinnara/ModernWpf)) - Utilized the ModernWpf library to create the UI sample
