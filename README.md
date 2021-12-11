@@ -4,8 +4,8 @@ This repository allows developers to more easily get information from and intera
 ![Windows 10 Media Interface](https://raw.githubusercontent.com/DubyaDude/WindowsMediaController/master/docs/images/Win10.png)
 
 This allows for a better understanding and control of the Media Sessions and can have many different applications. Some features include:
-- Control playback on individual Media Sessions (Spotify, Chrome etc)
-- Get media information of currently playing (Song, Author, Thumbnail etc)
+- Control playback on individual Media Sessions (Spotify, Chrome, etc)
+- Get media information of currently playing (Song, Author, Thumbnail, etc)
 
 ## Requirements
 - Windows 10 (Build 17763+) or Windows 11
@@ -13,10 +13,35 @@ This allows for a better understanding and control of the Media Sessions and can
 - .NET Framework 4.6+ or .NET Core 3.0+
 
 ## How To Use
-UNDER CONSTRUCTION
+### Initialization:
+```csharp
+mediaManager = new MediaManager();
+
+mediaManager.OnAnyNewSource += MediaManager_OnAnyNewSource;
+mediaManager.OnAnyRemovedSource += MediaManager_OnAnyRemovedSource;
+mediaManager.OnAnyPlaybackStateChanged += MediaManager_OnAnyPlaybackStateChanged;
+mediaManager.OnAnySongChanged += MediaManager_OnAnySongChanged;
+
+await mediaManager.Start();
+```
+
+### Getting Some Info:
+
+- Getting PlaybackInfo (Seeing what actions are available/Is paused or playing, etc)
+  - Returns: GlobalSystemMediaTransportControlsSessionPlaybackInfo
+  - ``mediaSession.ControlSession.GetPlaybackInfo()``
+
+- Getting current MediaProperties (Currently playing title, author, thumbnail, etc)
+  - Returns: GlobalSystemMediaTransportControlsSessionMediaProperties
+  - ``await mediaSession.ControlSession.TryGetMediaPropertiesAsync()``
+
+### Useful Microsoft Documentations:
+- [GlobalSystemMediaTransportControlsSessionManager](https://docs.microsoft.com/en-us/uwp/api/windows.media.control.globalsystemmediatransportcontrolssessionmanager) - Located in `MediaManager.WindowsSessionManager`. This class allows for events whenever a source's state changes.
+- [GlobalSystemMediaTransportControlsSession](https://docs.microsoft.com/en-us/uwp/api/windows.media.control.globalsystemmediatransportcontrolssession) - Located in `MediaManager.MediaSession.ControlSession`. The Media Session that allows for events whenever the playback state or the media property changes. 
+
   
 ## Samples
-- Sample.CMD - A very barebone console application for developers to get a feel of how their usecase might act.
+- Sample.CMD - A very barebone console application for developers to get a feel of how their use-case might act.
 
 ![Sample.CMD](https://raw.githubusercontent.com/DubyaDude/WindowsMediaController/master/docs/images/Sample.CMD.png)
 
@@ -26,4 +51,6 @@ UNDER CONSTRUCTION
 
 
 ## Credit
-- Luca Marini ([gitlab](https://gitlab.com/naatiivee)) - For helping me understand the Windows API to be able to create the wrapper
+- Luca Marini ([gitlab](https://gitlab.com/naatiivee)) - Helped me understand the Windows API
+- Google ([materialui](https://github.com/google/material-design-icons)) - Utilizing their play icon to create our icon
+- Kinnara ([ModernWpf](https://github.com/Kinnara/ModernWpf)) - Utilized the ModernWpf library to create the UI sample
