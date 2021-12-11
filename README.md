@@ -34,7 +34,7 @@ GlobalSystemMediaTransportControlsSessionManager WindowsSessionManager { get; }
 
 delegate void OnAnySessionOpened(MediaManager.MediaSession session);
 delegate void OnAnySessionClosed(MediaManager.MediaSession session);
-delegate void OnAnySongChanged(MediaManager.MediaSession sender, GlobalSystemMediaTransportControlsSessionMediaProperties args);
+delegate void OnAnyMediaPropertyChanged(MediaManager.MediaSession sender, GlobalSystemMediaTransportControlsSessionMediaProperties args);
 delegate void OnAnyPlaybackStateChanged(MediaManager.MediaSession sender, GlobalSystemMediaTransportControlsSessionPlaybackInfo args);
 ```
 MediaManager.MediaSession:
@@ -43,7 +43,7 @@ readonly string Id;
 GlobalSystemMediaTransportControlsSession ControlSession { get; }
 
 delegate void OnSessionClosed(MediaManager.MediaSession session);
-delegate void OnSongChanged(MediaManager.MediaSession sender, GlobalSystemMediaTransportControlsSessionMediaProperties args);
+delegate void OnMediaPropertyChanged(MediaManager.MediaSession sender, GlobalSystemMediaTransportControlsSessionMediaProperties args);
 delegate void OnPlaybackStateChanged(MediaManager.MediaSession sender, GlobalSystemMediaTransportControlsSessionPlaybackInfo args);
 ```
 
