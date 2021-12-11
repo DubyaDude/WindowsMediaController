@@ -24,7 +24,7 @@ mediaManager.OnAnySessionClosed += MediaManager_OnAnySessionClosed;
 mediaManager.OnAnyMediaPropertyChanged += MediaManager_OnAnyMediaPropertyChanged;
 mediaManager.OnAnyPlaybackStateChanged += MediaManager_OnAnyPlaybackStateChanged;
 
-await mediaManager.Start();
+mediaManager.Start();
 ```
 
 ### Class Structure:
