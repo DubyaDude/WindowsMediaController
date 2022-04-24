@@ -16,7 +16,7 @@ This allows for a better understanding and control of the Media Sessions and can
 - May need to be able to interact with the desktop
   - In situations such as being run through Windows Task Scheduler, the application will need an active window to start with, you can hide it afterward.
 ### NET Framework:
-For .NET Framework, I've seen people encountering issues with how the package gets imported. If you run across add the package by adding this to the .csproj file.
+For .NET Framework, I've seen people encountering issues with how the package gets imported. If you run across this issue, add the package by adding this to the .csproj file.
 <br> (replacing '2.1.0' with the preferred NuGet version)
 ```csproj
 <ItemGroup>
