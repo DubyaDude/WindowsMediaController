@@ -12,7 +12,7 @@ This allows for a better understanding and control of the Media Sessions and can
 ## Requirements
 - Windows 10 (Build 17763+) or Windows 11
 - The ability to talk to Windows Runtime. (In a majority of cases, this will not be an issue)
-- .NET Framework 4.6+ or .NET Core 3.0+
+- .NET Framework 4.6+ or .NET Core 3.0+ or .NET 5+
 - May need to be able to interact with the desktop
   - In situations such as being run through Windows Task Scheduler, the application will need an active window to start with, you can hide it afterward.
 ### NET Framework:
