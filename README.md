@@ -15,6 +15,27 @@ This allows for a better understanding and control of the Media Sessions and can
 - .NET Framework 4.6+ or .NET Core 3.0+
 - May need to be able to interact with the desktop
   - In situations such as being run through Windows Task Scheduler, the application will need an active window to start with, you can hide it afterward.
+### NET Framework:
+For .NET Framework, I've seen people encountering issues with how the package gets imported. If you run across add the package by adding this to the .csproj file.
+<br> (replacing '2.1.0' with the preferred NuGet version)
+```csproj
+<ItemGroup>
+  <PackageReference Include="Dubya.WindowsMediaController">
+    <Version>2.1.0</Version>
+  </PackageReference>
+</ItemGroup>
+```
+### NET 5+:
+NET 5 brought along a lot of changes in how WinRT is meant to be accessed. More of that info can be found [here](https://docs.microsoft.com/en-us/windows/apps/desktop/modernize/desktop-to-uwp-enhance).
+
+If you're doing a GUI app you **should** be good to go and be able to just import the lib.
+
+However, for other cases, your `TargetFramework` in the .csproj file needs to be modified before importing the package.
+<br> (replacing net5.0 with desired .NET version)
+```csproj
+<TargetFramework>net5.0-windows10.0.22000.0</TargetFramework>
+```
+
 ## How To Use
 ### Initialization:
 ```csharp
