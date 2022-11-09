@@ -13,51 +13,51 @@ namespace WindowsMediaController
         public delegate void SongChangeDelegate(MediaSession mediaSession, GlobalSystemMediaTransportControlsSessionMediaProperties mediaProperties);
 
         /// <summary>
-        /// Triggered when a new media source gets added to the <c>CurrentMediaSessions</c> dictionary
+        /// Triggered when a new media source gets added to the <see cref="CurrentMediaSessions"/> dictionary.
         /// </summary>
         public event SessionChangeDelegate OnAnySessionOpened;
 
         /// <summary>
-        /// Triggered when a media source gets removed from the <c>CurrentMediaSessions</c> dictionary
+        /// Triggered when a media source gets removed from the <see cref="CurrentMediaSessions"/> dictionary.
         /// </summary>
         public event SessionChangeDelegate OnAnySessionClosed;
 
         /// <summary>
-        /// Triggered when the focused <c>MediaSession</c> changes
+        /// Triggered when the focused <see cref="MediaSession"/> changes.
         /// </summary>
         public event SessionChangeDelegate OnFocusedSessionChanged;
 
         /// <summary>
-        /// Triggered when a playback state changes of any <c>MediaSession</c>
+        /// Triggered when a playback state changes of any <see cref="MediaSession"/>.
         /// </summary>
         public event PlaybackChangeDelegate OnAnyPlaybackStateChanged;
 
         /// <summary>
-        /// Triggered when a song changes of any <c>MediaSession</c>
+        /// Triggered when a song changes of any <see cref="MediaSession"/>.
         /// </summary>
         public event SongChangeDelegate OnAnyMediaPropertyChanged;
 
         /// <summary>
-        /// A dictionary of the current <c>(string MediaSessionIds, MediaSession MediaSessionInstance)</c>
+        /// A dictionary of the current <c>(<see cref="string"/> MediaSessionIds, <see cref="MediaSession"/> MediaSessionInstance)</c>
         /// </summary>
         public ReadOnlyDictionary<string, MediaSession> CurrentMediaSessions => new ReadOnlyDictionary<string, MediaSession>(_CurrentMediaSessions);
         private readonly Dictionary<string, MediaSession> _CurrentMediaSessions = new Dictionary<string, MediaSession>();
 
         /// <summary>
-        /// Tells if <c>MediaManager</c> has started
+        /// Whether the <see cref="MediaSession"/> has started.
         /// </summary>
         public bool IsStarted { get => _IsStarted; }
         private bool _IsStarted;
 
         /// <summary>
-        /// The <c>GlobalSystemMediaTransportControlsSessionManager</c> component from the Windows library
+        /// The <see cref="GlobalSystemMediaTransportControlsSessionManager"/> component from the Windows library.
         /// </summary>
         /// <seealso href="https://docs.microsoft.com/en-us/uwp/api/windows.media.control.globalsystemmediatransportcontrolssessionmanager"/>
         public GlobalSystemMediaTransportControlsSessionManager WindowsSessionManager { get => _WindowsSessionManager; }
         private GlobalSystemMediaTransportControlsSessionManager _WindowsSessionManager;
 
         /// <summary>
-        /// This starts the <c>MediaManager</c>
+        /// Starts the <see cref="MediaSession"/>.
         /// </summary>
         public void Start()
         {
@@ -78,7 +78,7 @@ namespace WindowsMediaController
         }
 
         /// <summary>
-        /// Gets the currently focused <c>MediaSession</c>.
+        /// Gets the currently focused <see cref="MediaSession"/>.
         /// </summary>
         public MediaSession GetFocusedSession()
         {
@@ -136,7 +136,6 @@ namespace WindowsMediaController
             sessionsToRemove.ForEach(x => x.Dispose());
         }
 
-
         private bool RemoveSource(MediaSession mediaSession)
         {
             if (_CurrentMediaSessions.ContainsKey(mediaSession.Id))
@@ -170,29 +169,29 @@ namespace WindowsMediaController
         public class MediaSession
         {
             /// <summary>
-            /// Triggered when this media source gets removed from the <c>CurrentMediaSessions</c> dictionary
+            /// Triggered when this media source gets removed from the <see cref="CurrentMediaSessions"/> dictionary.
             /// </summary>
             public event SessionChangeDelegate OnSessionClosed;
 
             /// <summary>
-            /// Triggered when a playback state changes of the <c>MediaSession</c>
+            /// Triggered when a playback state changes of the <see cref="MediaSession"/>.
             /// </summary>
             public event PlaybackChangeDelegate OnPlaybackStateChanged;
 
             /// <summary>
-            /// Triggered when a song changes of the <c>MediaSession</c>
+            /// Triggered when a song changes of the <see cref="MediaSession"/>.
             /// </summary>
             public event SongChangeDelegate OnMediaPropertyChanged;
 
             /// <summary>
-            /// The GlobalSystemMediaTransportControlsSession component from the Windows library
+            /// The <see cref="GlobalSystemMediaTransportControlsSession"/> component from the Windows library.
             /// </summary>
             /// <seealso href="https://docs.microsoft.com/en-us/uwp/api/windows.media.control.globalsystemmediatransportcontrolssession"/>
             public GlobalSystemMediaTransportControlsSession ControlSession { get => _ControlSession; }
             private GlobalSystemMediaTransportControlsSession _ControlSession;
 
             /// <summary>
-            /// The Unique Id of the <c>MediaSession</c>, grabbed from <c>GlobalSystemMediaTransportControlsSession.SourceAppUserModelId</c> from the Windows library
+            /// The Unique Id of the <see cref="MediaSession"/>, grabbed from <see cref="GlobalSystemMediaTransportControlsSession.SourceAppUserModelId"/> from the Windows library.
             /// </summary>
             /// <seealso href="https://docs.microsoft.com/en-us/uwp/api/windows.media.control.globalsystemmediatransportcontrolssession.sourceappusermodelid"/>
             public readonly string Id;
@@ -207,7 +206,6 @@ namespace WindowsMediaController
                 _ControlSession.MediaPropertiesChanged += OnSongChange;
                 _ControlSession.PlaybackInfoChanged += OnPlaybackInfoChanged;
             }
-
 
             private void OnPlaybackInfoChanged(GlobalSystemMediaTransportControlsSession controlSession, PlaybackInfoChangedEventArgs args = null)
             {
