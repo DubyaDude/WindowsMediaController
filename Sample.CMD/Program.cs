@@ -47,7 +47,7 @@ namespace Sample.CMD
         {
             WriteLineColor($"{sender.Id} is now playing {args.Title} {(String.IsNullOrEmpty(args.Artist) ? "" : $"by {args.Artist}")}", ConsoleColor.Cyan);
         }
-        
+
         public static void WriteLineColor(object toprint, ConsoleColor color = ConsoleColor.White)
         {
             Console.ForegroundColor = color;

@@ -56,14 +56,14 @@ namespace Sample.UI
                     SongList.MenuItems.Remove(itemToRemove);
             });
         }
-        
+
         private void MediaManager_OnFocusedSessionChanged(MediaSession session)
         {
             Application.Current.Dispatcher.Invoke(() =>
             {
                 foreach (NavigationViewItem? item in SongList.MenuItems)
                 {
-                    if(item != null)
+                    if (item != null)
                     {
                         item.Content = (((MediaSession?)item?.Tag)?.Id == session.Id ? "# " : "") + ((MediaSession?)item?.Tag)?.Id;
                     }

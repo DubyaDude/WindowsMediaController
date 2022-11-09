@@ -88,10 +88,10 @@ namespace WindowsMediaController
         private void CurrentSessionChanged(GlobalSystemMediaTransportControlsSessionManager sender, CurrentSessionChangedEventArgs args = null)
         {
             MediaSession currentMediaSession = GetFocusedSession(sender);
-            
+
             try { OnFocusedSessionChanged?.Invoke(currentMediaSession); } catch { }
         }
-        
+
         private MediaSession GetFocusedSession(GlobalSystemMediaTransportControlsSessionManager sender)
         {
             var currentSession = sender.GetCurrentSession();
