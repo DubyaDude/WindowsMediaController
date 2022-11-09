@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Threading.Tasks;
 using Windows.Media.Control;
 
 namespace WindowsMediaController
@@ -88,10 +87,10 @@ namespace WindowsMediaController
             }
 
             //Checking if a source fell off the session list without doing a proper Closed event (*cough* spotify *cough*)
-            IEnumerable<string> controlSessionIds = controlSessionList.Select(x=> x.SourceAppUserModelId);
+            IEnumerable<string> controlSessionIds = controlSessionList.Select(x => x.SourceAppUserModelId);
             List<MediaSession> sessionsToRemove = new List<MediaSession>();
 
-            foreach(var session in CurrentMediaSessions)
+            foreach (var session in CurrentMediaSessions)
             {
                 if (!controlSessionIds.Contains(session.Key))
                 {
@@ -122,7 +121,7 @@ namespace WindowsMediaController
             OnAnyPlaybackStateChanged = null;
 
             List<string> keys = CurrentMediaSessions.Keys.ToList();
-            foreach(var key in keys)
+            foreach (var key in keys)
             {
                 CurrentMediaSessions[key].Dispose();
             }
@@ -183,7 +182,7 @@ namespace WindowsMediaController
                 {
                     Dispose();
                 }
-                else 
+                else
                 {
                     try { OnPlaybackStateChanged?.Invoke(this, playbackInfo); } catch { }
                     try { MediaManagerInstance.OnAnyPlaybackStateChanged?.Invoke(this, playbackInfo); } catch { }

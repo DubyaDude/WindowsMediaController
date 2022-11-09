@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using WindowsMediaController;
 using Windows.Media.Control;
+using WindowsMediaController;
 
 namespace Sample.CMD
 {

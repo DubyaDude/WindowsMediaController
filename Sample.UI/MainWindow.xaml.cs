@@ -1,18 +1,7 @@
 ﻿using ModernWpf.Controls;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using Windows.Media.Control;
 using Windows.Storage.Streams;
 using WindowsMediaController;
@@ -59,24 +48,24 @@ namespace Sample.UI
                 NavigationViewItem? itemToRemove = null;
 
                 foreach (NavigationViewItem? item in SongList.MenuItems)
-                        if (item?.Content.ToString() == session.Id)
-                            itemToRemove = item;
+                    if (item?.Content.ToString() == session.Id)
+                        itemToRemove = item;
 
-                if(itemToRemove != null)
+                if (itemToRemove != null)
                     SongList.MenuItems.Remove(itemToRemove);
             });
         }
 
         private void SongList_SelectionChanged(NavigationView navView, NavigationViewSelectionChangedEventArgs args)
         {
-            if(currentSession != null)
+            if (currentSession != null)
             {
                 currentSession.OnMediaPropertyChanged -= CurrentSession_OnMediaPropertyChanged;
                 currentSession.OnPlaybackStateChanged -= CurrentSession_OnPlaybackStateChanged;
                 currentSession = null;
             }
 
-            if(navView.SelectedItem != null)
+            if (navView.SelectedItem != null)
             {
                 currentSession = (MediaSession)((NavigationViewItem)navView.SelectedItem).Tag;
                 currentSession.OnMediaPropertyChanged += CurrentSession_OnMediaPropertyChanged;
@@ -121,7 +110,7 @@ namespace Sample.UI
             }
 
             var songInfo = mediaSession.ControlSession.TryGetMediaPropertiesAsync().GetAwaiter().GetResult();
-            if(songInfo != null)
+            if (songInfo != null)
             {
                 SongTitle.Content = songInfo.Title.ToUpper();
                 SongAuthor.Content = songInfo.Artist;
