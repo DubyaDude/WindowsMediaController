@@ -14,6 +14,7 @@ namespace Sample.CMD
 
             mediaManager.OnAnySessionOpened += MediaManager_OnAnySessionOpened;
             mediaManager.OnAnySessionClosed += MediaManager_OnAnySessionClosed;
+            mediaManager.OnFocusedSessionChanged += MediaManager_OnFocusedSessionChanged;
             mediaManager.OnAnyPlaybackStateChanged += MediaManager_OnAnyPlaybackStateChanged;
             mediaManager.OnAnyMediaPropertyChanged += MediaManager_OnAnyMediaPropertyChanged;
 
@@ -32,6 +33,11 @@ namespace Sample.CMD
             WriteLineColor("-- Removed Source: " + session.Id, ConsoleColor.Red);
         }
 
+        private static void MediaManager_OnFocusedSessionChanged(MediaManager.MediaSession mediaSession)
+        {
+            WriteLineColor("== Session Focus Changed: " + mediaSession?.ControlSession?.SourceAppUserModelId, ConsoleColor.Gray);
+        }
+
         private static void MediaManager_OnAnyPlaybackStateChanged(MediaManager.MediaSession sender, GlobalSystemMediaTransportControlsSessionPlaybackInfo args)
         {
             WriteLineColor($"{sender.Id} is now {args.PlaybackStatus}", ConsoleColor.Yellow);
@@ -41,9 +47,8 @@ namespace Sample.CMD
         {
             WriteLineColor($"{sender.Id} is now playing {args.Title} {(String.IsNullOrEmpty(args.Artist) ? "" : $"by {args.Artist}")}", ConsoleColor.Cyan);
         }
-
-
-        public static void WriteLineColor(object toprint, ConsoleColor color = ConsoleColor.Gray)
+        
+        public static void WriteLineColor(object toprint, ConsoleColor color = ConsoleColor.White)
         {
             Console.ForegroundColor = color;
             Console.WriteLine("[" + DateTime.Now.ToString("HH:mm:ss.fff") + "] " + toprint);

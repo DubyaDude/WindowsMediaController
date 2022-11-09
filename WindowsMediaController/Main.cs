@@ -23,6 +23,11 @@ namespace WindowsMediaController
         public event SessionChangeDelegate OnAnySessionClosed;
 
         /// <summary>
+        /// Triggered when the focused <c>MediaSession</c> changes
+        /// </summary>
+        public event SessionChangeDelegate OnFocusedSessionChanged;
+
+        /// <summary>
         /// Triggered when a playback state changes of any <c>MediaSession</c>
         /// </summary>
         public event PlaybackChangeDelegate OnAnyPlaybackStateChanged;
@@ -61,13 +66,43 @@ namespace WindowsMediaController
                 //Populate CurrentMediaSessions with already open Sessions
                 _WindowsSessionManager = GlobalSystemMediaTransportControlsSessionManager.RequestAsync().GetAwaiter().GetResult();
                 SessionsChanged(_WindowsSessionManager);
+                CurrentSessionChanged(_WindowsSessionManager);
                 _WindowsSessionManager.SessionsChanged += SessionsChanged;
+                _WindowsSessionManager.CurrentSessionChanged += CurrentSessionChanged;
                 _IsStarted = true;
             }
             else
             {
                 throw new InvalidOperationException("MediaManager already started");
             }
+        }
+
+        /// <summary>
+        /// Gets the currently focused <c>MediaSession</c>.
+        /// </summary>
+        public MediaSession GetFocusedSession()
+        {
+            return GetFocusedSession(_WindowsSessionManager);
+        }
+
+        private void CurrentSessionChanged(GlobalSystemMediaTransportControlsSessionManager sender, CurrentSessionChangedEventArgs args = null)
+        {
+            MediaSession currentMediaSession = GetFocusedSession(sender);
+            
+            try { OnFocusedSessionChanged?.Invoke(currentMediaSession); } catch { }
+        }
+        
+        private MediaSession GetFocusedSession(GlobalSystemMediaTransportControlsSessionManager sender)
+        {
+            var currentSession = sender.GetCurrentSession();
+
+            MediaSession currentMediaSession = null;
+            if (currentSession != null)
+            {
+                currentMediaSession = _CurrentMediaSessions[currentSession.SourceAppUserModelId];
+            }
+
+            return currentMediaSession;
         }
 
         private void SessionsChanged(GlobalSystemMediaTransportControlsSessionManager winSessionManager, SessionsChangedEventArgs args = null)

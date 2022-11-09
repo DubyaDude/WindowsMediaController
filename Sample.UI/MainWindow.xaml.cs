@@ -23,6 +23,7 @@ namespace Sample.UI
 
             mediaManager.OnAnySessionOpened += MediaManager_OnAnySessionOpened;
             mediaManager.OnAnySessionClosed += MediaManager_OnAnySessionClosed;
+            mediaManager.OnFocusedSessionChanged += MediaManager_OnFocusedSessionChanged;
 
             mediaManager.Start();
         }
@@ -48,11 +49,25 @@ namespace Sample.UI
                 NavigationViewItem? itemToRemove = null;
 
                 foreach (NavigationViewItem? item in SongList.MenuItems)
-                    if (item?.Content.ToString() == session.Id)
+                    if (((MediaSession?)item?.Tag)?.ToString() == session.Id)
                         itemToRemove = item;
 
                 if (itemToRemove != null)
                     SongList.MenuItems.Remove(itemToRemove);
+            });
+        }
+        
+        private void MediaManager_OnFocusedSessionChanged(MediaSession session)
+        {
+            Application.Current.Dispatcher.Invoke(() =>
+            {
+                foreach (NavigationViewItem? item in SongList.MenuItems)
+                {
+                    if(item != null)
+                    {
+                        item.Content = (((MediaSession?)item?.Tag)?.Id == session.Id ? "# " : "") + ((MediaSession?)item?.Tag)?.Id;
+                    }
+                }
             });
         }
 
