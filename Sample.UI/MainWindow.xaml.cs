@@ -65,7 +65,7 @@ namespace Sample.UI
                 {
                     if (item != null)
                     {
-                        item.Content = (((MediaSession?)item?.Tag)?.Id == session.Id ? "# " : "") + ((MediaSession?)item?.Tag)?.Id;
+                        item.Content = (((MediaSession?)item?.Tag)?.Id == session?.Id ? "# " : "") + ((MediaSession?)item?.Tag)?.Id;
                     }
                 }
             });
