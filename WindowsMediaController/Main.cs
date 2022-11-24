@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Threading.Tasks;
 using Windows.Media.Control;
 
 namespace WindowsMediaController
@@ -61,20 +62,25 @@ namespace WindowsMediaController
         /// </summary>
         public void Start()
         {
-            if (!_IsStarted)
-            {
-                //Populate CurrentMediaSessions with already open Sessions
-                _WindowsSessionManager = GlobalSystemMediaTransportControlsSessionManager.RequestAsync().GetAwaiter().GetResult();
-                SessionsChanged(_WindowsSessionManager);
-                CurrentSessionChanged(_WindowsSessionManager);
-                _WindowsSessionManager.SessionsChanged += SessionsChanged;
-                _WindowsSessionManager.CurrentSessionChanged += CurrentSessionChanged;
-                _IsStarted = true;
-            }
-            else
-            {
-                throw new InvalidOperationException("MediaManager already started");
-            }
+            CheckStarted(true);
+            
+            //Populate CurrentMediaSessions with already open Sessions
+            _WindowsSessionManager = GlobalSystemMediaTransportControlsSessionManager.RequestAsync().GetAwaiter().GetResult();
+            CompleteStart();
+        }
+
+
+        /// <summary>
+        /// Starts the <see cref="MediaSession"/> asynchronously.
+        /// </summary>
+        public async Task StartAsync()
+        {
+            CheckStarted(true);
+
+            //Populate CurrentMediaSessions with already open Sessions
+            _WindowsSessionManager = await GlobalSystemMediaTransportControlsSessionManager.RequestAsync();
+            CompleteStart();
+        }
 
         /// <summary>
         /// Force updates <see cref="CurrentMediaSessions"/> dictionary and triggers <see cref="OnFocusedSessionChanged"/>. Exists to help mitigate bug where some events stop triggering: <a href="https://github.com/DubyaDude/WindowsMediaController/issues/6">Github Issue Link</a>.
@@ -90,7 +96,29 @@ namespace WindowsMediaController
         /// </summary>
         public MediaSession GetFocusedSession()
         {
+            CheckStarted(false);
             return GetFocusedSession(_WindowsSessionManager);
+        }
+        
+        private void CheckStarted(bool checkStarted)
+        {
+            if (_IsStarted && checkStarted)
+            {
+                throw new InvalidOperationException("MediaManager already started");
+            }
+            else if(!_IsStarted && !checkStarted)
+            {
+                throw new InvalidOperationException("MediaManager has not started");
+            }
+        }
+
+        private void CompleteStart()
+        {
+            SessionsChanged(_WindowsSessionManager);
+            CurrentSessionChanged(_WindowsSessionManager);
+            _WindowsSessionManager.SessionsChanged += SessionsChanged;
+            _WindowsSessionManager.CurrentSessionChanged += CurrentSessionChanged;
+            _IsStarted = true;
         }
 
         private void CurrentSessionChanged(GlobalSystemMediaTransportControlsSessionManager sender, CurrentSessionChangedEventArgs args = null)
