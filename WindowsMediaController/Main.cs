@@ -75,6 +75,14 @@ namespace WindowsMediaController
             {
                 throw new InvalidOperationException("MediaManager already started");
             }
+
+        /// <summary>
+        /// Force updates <see cref="CurrentMediaSessions"/> dictionary and triggers <see cref="OnFocusedSessionChanged"/>. Exists to help mitigate bug where some events stop triggering: <a href="https://github.com/DubyaDude/WindowsMediaController/issues/6">Github Issue Link</a>.
+        /// </summary>
+        public void ForceUpdate()
+        {
+            SessionsChanged(_WindowsSessionManager);
+            CurrentSessionChanged(_WindowsSessionManager);
         }
 
         /// <summary>
