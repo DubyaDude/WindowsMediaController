@@ -49,7 +49,7 @@ mediaManager.OnAnyPlaybackStateChanged += MediaManager_OnAnyPlaybackStateChanged
 
 mediaManager.Start();
 OR
-mediaManager.StartAsync();
+await mediaManager.StartAsync();
 ```
 
 ### Class Structure:
