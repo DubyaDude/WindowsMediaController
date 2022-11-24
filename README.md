@@ -43,6 +43,7 @@ mediaManager = new MediaManager();
 
 mediaManager.OnAnySessionOpened += MediaManager_OnAnySessionOpened;
 mediaManager.OnAnySessionClosed += MediaManager_OnAnySessionClosed;
+mediaManager.OnFocusedSessionChanged += MediaManager_OnFocusedSessionChanged;
 mediaManager.OnAnyMediaPropertyChanged += MediaManager_OnAnyMediaPropertyChanged;
 mediaManager.OnAnyPlaybackStateChanged += MediaManager_OnAnyPlaybackStateChanged;
 
