@@ -21,7 +21,7 @@ For .NET Framework, I've seen people encountering issues with how the package ge
 ```csproj
 <ItemGroup>
   <PackageReference Include="Dubya.WindowsMediaController">
-    <Version>2.1.0</Version>
+    <Version>2.3.0</Version>
   </PackageReference>
 </ItemGroup>
 ```
@@ -47,6 +47,8 @@ mediaManager.OnAnyMediaPropertyChanged += MediaManager_OnAnyMediaPropertyChanged
 mediaManager.OnAnyPlaybackStateChanged += MediaManager_OnAnyPlaybackStateChanged;
 
 mediaManager.Start();
+OR
+mediaManager.StartAsync();
 ```
 
 ### Class Structure:
@@ -56,8 +58,14 @@ ReadOnlyDictionary<string, MediaSession> CurrentMediaSessions;
 bool IsStarted { get; }
 GlobalSystemMediaTransportControlsSessionManager WindowsSessionManager { get; }
 
+void Start();
+async Task StartAsync();
+MediaSession GetFocusedSession();
+void ForceUpdate();
+
 delegate void OnAnySessionOpened(MediaManager.MediaSession session);
 delegate void OnAnySessionClosed(MediaManager.MediaSession session);
+delegate void OnFocusedSessionChanged(MediaManager.MediaSession session);
 delegate void OnAnyMediaPropertyChanged(MediaManager.MediaSession sender, GlobalSystemMediaTransportControlsSessionMediaProperties args);
 delegate void OnAnyPlaybackStateChanged(MediaManager.MediaSession sender, GlobalSystemMediaTransportControlsSessionPlaybackInfo args);
 ```
