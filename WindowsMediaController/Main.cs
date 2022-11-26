@@ -47,15 +47,13 @@ namespace WindowsMediaController
         /// <summary>
         /// Whether the <see cref="MediaSession"/> has started.
         /// </summary>
-        public bool IsStarted { get => _IsStarted; }
-        private bool _IsStarted;
+        public bool IsStarted { get; private set; }
 
         /// <summary>
         /// The <see cref="GlobalSystemMediaTransportControlsSessionManager"/> component from the Windows library.
         /// </summary>
         /// <seealso href="https://docs.microsoft.com/en-us/uwp/api/windows.media.control.globalsystemmediatransportcontrolssessionmanager"/>
-        public GlobalSystemMediaTransportControlsSessionManager WindowsSessionManager { get => _WindowsSessionManager; }
-        private GlobalSystemMediaTransportControlsSessionManager _WindowsSessionManager;
+        public GlobalSystemMediaTransportControlsSessionManager WindowsSessionManager { get; private set; }
 
         /// <summary>
         /// Starts the <see cref="MediaSession"/>.
@@ -63,9 +61,9 @@ namespace WindowsMediaController
         public void Start()
         {
             CheckStarted(true);
-            
+
             //Populate CurrentMediaSessions with already open Sessions
-            _WindowsSessionManager = GlobalSystemMediaTransportControlsSessionManager.RequestAsync().GetAwaiter().GetResult();
+            WindowsSessionManager = GlobalSystemMediaTransportControlsSessionManager.RequestAsync().GetAwaiter().GetResult();
             CompleteStart();
         }
 
@@ -78,7 +76,7 @@ namespace WindowsMediaController
             CheckStarted(true);
 
             //Populate CurrentMediaSessions with already open Sessions
-            _WindowsSessionManager = await GlobalSystemMediaTransportControlsSessionManager.RequestAsync();
+            WindowsSessionManager = await GlobalSystemMediaTransportControlsSessionManager.RequestAsync();
             CompleteStart();
         }
 
@@ -87,8 +85,8 @@ namespace WindowsMediaController
         /// </summary>
         public void ForceUpdate()
         {
-            SessionsChanged(_WindowsSessionManager);
-            CurrentSessionChanged(_WindowsSessionManager);
+            SessionsChanged(WindowsSessionManager);
+            CurrentSessionChanged(WindowsSessionManager);
         }
 
         /// <summary>
@@ -97,16 +95,16 @@ namespace WindowsMediaController
         public MediaSession GetFocusedSession()
         {
             CheckStarted(false);
-            return GetFocusedSession(_WindowsSessionManager);
+            return GetFocusedSession(WindowsSessionManager);
         }
         
         private void CheckStarted(bool checkStarted)
         {
-            if (_IsStarted && checkStarted)
+            if (IsStarted && checkStarted)
             {
                 throw new InvalidOperationException("MediaManager already started");
             }
-            else if(!_IsStarted && !checkStarted)
+            else if(!IsStarted && !checkStarted)
             {
                 throw new InvalidOperationException("MediaManager has not started");
             }
@@ -114,11 +112,11 @@ namespace WindowsMediaController
 
         private void CompleteStart()
         {
-            SessionsChanged(_WindowsSessionManager);
-            CurrentSessionChanged(_WindowsSessionManager);
-            _WindowsSessionManager.SessionsChanged += SessionsChanged;
-            _WindowsSessionManager.CurrentSessionChanged += CurrentSessionChanged;
-            _IsStarted = true;
+            SessionsChanged(WindowsSessionManager);
+            CurrentSessionChanged(WindowsSessionManager);
+            WindowsSessionManager.SessionsChanged += SessionsChanged;
+            WindowsSessionManager.CurrentSessionChanged += CurrentSessionChanged;
+            IsStarted = true;
         }
 
         private void CurrentSessionChanged(GlobalSystemMediaTransportControlsSessionManager sender, CurrentSessionChangedEventArgs args = null)
@@ -197,9 +195,9 @@ namespace WindowsMediaController
             }
             _CurrentMediaSessions?.Clear();
 
-            _IsStarted = false;
-            _WindowsSessionManager.SessionsChanged -= SessionsChanged;
-            _WindowsSessionManager = null;
+            IsStarted = false;
+            WindowsSessionManager.SessionsChanged -= SessionsChanged;
+            WindowsSessionManager = null;
         }
 
         public class MediaSession
@@ -223,8 +221,7 @@ namespace WindowsMediaController
             /// The <see cref="GlobalSystemMediaTransportControlsSession"/> component from the Windows library.
             /// </summary>
             /// <seealso href="https://docs.microsoft.com/en-us/uwp/api/windows.media.control.globalsystemmediatransportcontrolssession"/>
-            public GlobalSystemMediaTransportControlsSession ControlSession { get => _ControlSession; }
-            private GlobalSystemMediaTransportControlsSession _ControlSession;
+            public GlobalSystemMediaTransportControlsSession ControlSession { get; private set; }
 
             /// <summary>
             /// The Unique Id of the <see cref="MediaSession"/>, grabbed from <see cref="GlobalSystemMediaTransportControlsSession.SourceAppUserModelId"/> from the Windows library.
@@ -237,10 +234,10 @@ namespace WindowsMediaController
             internal MediaSession(GlobalSystemMediaTransportControlsSession controlSession, MediaManager mediaMangerInstance)
             {
                 MediaManagerInstance = mediaMangerInstance;
-                _ControlSession = controlSession;
-                Id = _ControlSession.SourceAppUserModelId;
-                _ControlSession.MediaPropertiesChanged += OnSongChange;
-                _ControlSession.PlaybackInfoChanged += OnPlaybackInfoChanged;
+                ControlSession = controlSession;
+                Id = ControlSession.SourceAppUserModelId;
+                ControlSession.MediaPropertiesChanged += OnSongChange;
+                ControlSession.PlaybackInfoChanged += OnPlaybackInfoChanged;
             }
 
             private void OnPlaybackInfoChanged(GlobalSystemMediaTransportControlsSession controlSession, PlaybackInfoChangedEventArgs args = null)
@@ -284,9 +281,9 @@ namespace WindowsMediaController
                     OnPlaybackStateChanged = null;
                     OnMediaPropertyChanged = null;
                     OnSessionClosed = null;
-                    _ControlSession.PlaybackInfoChanged -= OnPlaybackInfoChanged;
-                    _ControlSession.MediaPropertiesChanged -= OnSongChange;
-                    _ControlSession = null;
+                    ControlSession.PlaybackInfoChanged -= OnPlaybackInfoChanged;
+                    ControlSession.MediaPropertiesChanged -= OnSongChange;
+                    ControlSession = null;
                     try { OnSessionClosed?.Invoke(this); } catch { }
                 }
             }
