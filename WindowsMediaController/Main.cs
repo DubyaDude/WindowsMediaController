@@ -258,12 +258,23 @@ namespace WindowsMediaController
                 }
             }
 
-            internal async void OnSongChange(GlobalSystemMediaTransportControlsSession controlSession, MediaPropertiesChangedEventArgs args = null)
+            internal void OnSongChange(GlobalSystemMediaTransportControlsSession controlSession, MediaPropertiesChangedEventArgs args = null)
             {
-                var mediaProperties = await controlSession.TryGetMediaPropertiesAsync();
+                try
+                {
+                    var mediaProperties = controlSession.TryGetMediaPropertiesAsync().GetAwaiter().GetResult();
 
-                try { OnMediaPropertyChanged?.Invoke(this, mediaProperties); } catch { }
-                try { MediaManagerInstance.OnAnyMediaPropertyChanged?.Invoke(this, mediaProperties); } catch { }
+                    try { OnMediaPropertyChanged?.Invoke(this, mediaProperties); } catch { }
+                    try { MediaManagerInstance.OnAnyMediaPropertyChanged?.Invoke(this, mediaProperties); } catch { }
+                }
+                catch(System.Runtime.InteropServices.COMException ex)
+                {
+                    // Silence error from bug https://github.com/DubyaDude/WindowsMediaController/issues/7
+                    if (!ex.Message.Contains("0x800706BA"))
+                    {
+                        throw;
+                    }
+                }
             }
 
             internal void Dispose()
