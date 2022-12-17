@@ -7,6 +7,7 @@ namespace Sample.CMD
     class Program
     {
         static MediaManager mediaManager;
+        static object _writeLock = new object();
 
         public static void Main()
         {
@@ -50,8 +51,11 @@ namespace Sample.CMD
 
         public static void WriteLineColor(object toprint, ConsoleColor color = ConsoleColor.White)
         {
-            Console.ForegroundColor = color;
-            Console.WriteLine("[" + DateTime.Now.ToString("HH:mm:ss.fff") + "] " + toprint);
+            lock (_writeLock)
+            {
+                Console.ForegroundColor = color;
+                Console.WriteLine("[" + DateTime.Now.ToString("HH:mm:ss.fff") + "] " + toprint);
+            }
         }
     }
 }
