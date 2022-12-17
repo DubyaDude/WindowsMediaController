@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 using Windows.Media.Control;
@@ -129,7 +128,7 @@ namespace WindowsMediaController
         private MediaSession GetFocusedSession(GlobalSystemMediaTransportControlsSessionManager sender)
         {
             var currentSession = sender.GetCurrentSession();
-            
+
             MediaSession currentMediaSession = null;
             if (currentSession != null && _CurrentMediaSessions.TryGetValue(currentSession.SourceAppUserModelId, out MediaSession mediaSession))
             {
