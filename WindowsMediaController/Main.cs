@@ -146,7 +146,7 @@ namespace WindowsMediaController
             //Checking for any new sessions, if found a new one add it to our dictiony and fire OnNewSource
             foreach (var controlSession in controlSessionList)
             {
-                if (!CurrentMediaSessions.ContainsKey(controlSession.SourceAppUserModelId))
+                if (!_CurrentMediaSessions.ContainsKey(controlSession.SourceAppUserModelId))
                 {
                     MediaSession mediaSession = new MediaSession(controlSession, this);
                     _CurrentMediaSessions[controlSession.SourceAppUserModelId] = mediaSession;
@@ -159,7 +159,7 @@ namespace WindowsMediaController
             IEnumerable<string> controlSessionIds = controlSessionList.Select(x => x.SourceAppUserModelId);
             List<MediaSession> sessionsToRemove = new List<MediaSession>();
 
-            foreach (var session in CurrentMediaSessions)
+            foreach (var session in _CurrentMediaSessions)
             {
                 if (!controlSessionIds.Contains(session.Key))
                 {
@@ -188,10 +188,10 @@ namespace WindowsMediaController
             OnAnyMediaPropertyChanged = null;
             OnAnyPlaybackStateChanged = null;
 
-            List<string> keys = CurrentMediaSessions.Keys.ToList();
+            var keys = _CurrentMediaSessions.Keys;
             foreach (var key in keys)
             {
-                CurrentMediaSessions[key].Dispose();
+                _CurrentMediaSessions[key].Dispose();
             }
             _CurrentMediaSessions?.Clear();
 
