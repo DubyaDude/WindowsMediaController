@@ -97,14 +97,14 @@ namespace WindowsMediaController
             CheckStarted(false);
             return GetFocusedSession(WindowsSessionManager);
         }
-        
+
         private void CheckStarted(bool checkStarted)
         {
             if (IsStarted && checkStarted)
             {
                 throw new InvalidOperationException("MediaManager already started");
             }
-            else if(!IsStarted && !checkStarted)
+            else if (!IsStarted && !checkStarted)
             {
                 throw new InvalidOperationException("MediaManager has not started");
             }
@@ -151,7 +151,7 @@ namespace WindowsMediaController
                     MediaSession mediaSession = new MediaSession(controlSession, this);
                     _CurrentMediaSessions[controlSession.SourceAppUserModelId] = mediaSession;
                     try { OnAnySessionOpened?.Invoke(mediaSession); } catch { }
-                    mediaSession.OnSongChange(controlSession);
+                    mediaSession.OnSongChangeAsync(controlSession);
                 }
             }
 
@@ -236,7 +236,7 @@ namespace WindowsMediaController
                 MediaManagerInstance = mediaMangerInstance;
                 ControlSession = controlSession;
                 Id = ControlSession.SourceAppUserModelId;
-                ControlSession.MediaPropertiesChanged += OnSongChange;
+                ControlSession.MediaPropertiesChanged += OnSongChangeAsync;
                 ControlSession.PlaybackInfoChanged += OnPlaybackInfoChanged;
             }
 
@@ -255,16 +255,16 @@ namespace WindowsMediaController
                 }
             }
 
-            internal void OnSongChange(GlobalSystemMediaTransportControlsSession controlSession, MediaPropertiesChangedEventArgs args = null)
+            internal async void OnSongChangeAsync(GlobalSystemMediaTransportControlsSession controlSession, MediaPropertiesChangedEventArgs args = null)
             {
                 try
                 {
-                    var mediaProperties = controlSession.TryGetMediaPropertiesAsync().GetAwaiter().GetResult();
+                    var mediaProperties = await controlSession.TryGetMediaPropertiesAsync();
 
                     try { OnMediaPropertyChanged?.Invoke(this, mediaProperties); } catch { }
                     try { MediaManagerInstance.OnAnyMediaPropertyChanged?.Invoke(this, mediaProperties); } catch { }
                 }
-                catch(System.Runtime.InteropServices.COMException ex)
+                catch (System.Runtime.InteropServices.COMException ex)
                 {
                     // Silence error from bug https://github.com/DubyaDude/WindowsMediaController/issues/7
                     if (!ex.Message.Contains("0x800706BA"))
@@ -282,7 +282,7 @@ namespace WindowsMediaController
                     OnMediaPropertyChanged = null;
                     OnSessionClosed = null;
                     ControlSession.PlaybackInfoChanged -= OnPlaybackInfoChanged;
-                    ControlSession.MediaPropertiesChanged -= OnSongChange;
+                    ControlSession.MediaPropertiesChanged -= OnSongChangeAsync;
                     ControlSession = null;
                     try { OnSessionClosed?.Invoke(this); } catch { }
                 }
