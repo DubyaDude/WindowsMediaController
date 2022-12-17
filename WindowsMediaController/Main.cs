@@ -129,11 +129,11 @@ namespace WindowsMediaController
         private MediaSession GetFocusedSession(GlobalSystemMediaTransportControlsSessionManager sender)
         {
             var currentSession = sender.GetCurrentSession();
-
+            
             MediaSession currentMediaSession = null;
-            if (currentSession != null)
+            if (currentSession != null && _CurrentMediaSessions.TryGetValue(currentSession.SourceAppUserModelId, out MediaSession mediaSession))
             {
-                currentMediaSession = _CurrentMediaSessions[currentSession.SourceAppUserModelId];
+                currentMediaSession = mediaSession;
             }
 
             return currentMediaSession;
