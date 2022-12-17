@@ -41,7 +41,7 @@ namespace WindowsMediaController
         /// <summary>
         /// A dictionary of the current <c>(<see cref="string"/> MediaSessionIds, <see cref="MediaSession"/> MediaSessionInstance)</c>
         /// </summary>
-        public ReadOnlyDictionary<string, MediaSession> CurrentMediaSessions => new ReadOnlyDictionary<string, MediaSession>(_CurrentMediaSessions);
+        public IReadOnlyDictionary<string, MediaSession> CurrentMediaSessions => _CurrentMediaSessions;
         private readonly Dictionary<string, MediaSession> _CurrentMediaSessions = new Dictionary<string, MediaSession>();
 
         /// <summary>
