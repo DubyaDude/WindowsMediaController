@@ -7,7 +7,7 @@ namespace Sample.CMD
     class Program
     {
         static MediaManager mediaManager;
-        static object _writeLock = new object();
+        static readonly object _writeLock = new object();
 
         public static void Main()
         {
