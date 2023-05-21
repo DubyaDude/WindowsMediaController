@@ -63,10 +63,8 @@ namespace WindowsMediaController
         /// <summary>
         /// Starts the <see cref="MediaSession"/>.
         /// </summary>
-        public void Start(ILogger logger = null)
+        public void Start()
         {
-            Logger = logger;
-
             CheckStarted(true);
 
             //Populate CurrentMediaSessions with already open Sessions
@@ -78,10 +76,8 @@ namespace WindowsMediaController
         /// <summary>
         /// Starts the <see cref="MediaSession"/> asynchronously.
         /// </summary>
-        public async Task StartAsync(ILogger logger = null)
+        public async Task StartAsync()
         {
-            Logger = logger;
-
             CheckStarted(true);
 
             //Populate CurrentMediaSessions with already open Sessions

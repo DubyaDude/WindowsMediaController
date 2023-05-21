@@ -14,7 +14,10 @@ namespace Sample.CMD
 
         public static void Main()
         {
-            mediaManager = new MediaManager();
+            mediaManager = new MediaManager()
+            {
+                Logger = BuildLogger("MediaManager"),
+            };
 
             mediaManager.OnAnySessionOpened += MediaManager_OnAnySessionOpened;
             mediaManager.OnAnySessionClosed += MediaManager_OnAnySessionClosed;
@@ -22,8 +25,7 @@ namespace Sample.CMD
             mediaManager.OnAnyPlaybackStateChanged += MediaManager_OnAnyPlaybackStateChanged;
             mediaManager.OnAnyMediaPropertyChanged += MediaManager_OnAnyMediaPropertyChanged;
 
-            var mediaLogger = BuildLogger("MediaManager");
-            mediaManager.Start(mediaLogger);
+            mediaManager.Start();
 
             Console.ReadLine();
             mediaManager.Dispose();
