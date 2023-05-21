@@ -1,4 +1,7 @@
-﻿using System;
+﻿using Microsoft.Extensions.Logging;
+using Serilog.Events;
+using Serilog;
+using System;
 using Windows.Media.Control;
 using WindowsMediaController;
 
@@ -19,7 +22,8 @@ namespace Sample.CMD
             mediaManager.OnAnyPlaybackStateChanged += MediaManager_OnAnyPlaybackStateChanged;
             mediaManager.OnAnyMediaPropertyChanged += MediaManager_OnAnyMediaPropertyChanged;
 
-            mediaManager.Start();
+            var mediaLogger = BuildLogger("MediaManager");
+            mediaManager.Start(mediaLogger);
 
             Console.ReadLine();
             mediaManager.Dispose();
@@ -56,6 +60,15 @@ namespace Sample.CMD
                 Console.ForegroundColor = color;
                 Console.WriteLine("[" + DateTime.Now.ToString("HH:mm:ss.fff") + "] " + toprint);
             }
+        }
+
+        private static Microsoft.Extensions.Logging.ILogger BuildLogger(string sourceContext = null)
+        {
+            return new LoggerFactory().AddSerilog(logger: new LoggerConfiguration()
+                    .MinimumLevel.Is(LogEventLevel.Information)
+                    .WriteTo.Console(outputTemplate: "[{Timestamp:HH:mm:ss.fff}] [{Level:u4}] " + (sourceContext ?? "{SourceContext}") + ": {Message:lj}{NewLine}{Exception}")
+                    .CreateLogger())
+                    .CreateLogger(string.Empty);
         }
     }
 }
