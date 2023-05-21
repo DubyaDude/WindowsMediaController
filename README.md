@@ -12,7 +12,7 @@ This allows for a better understanding and control of the Media Sessions and can
 ## Requirements
 - Windows 10 (Build 17763+) or Windows 11
 - The ability to talk to Windows Runtime. (In a majority of cases, this will not be an issue)
-- .NET Framework 4.6+ or .NET Core 3.0+ or .NET 5+
+- .NET Framework 4.6.2+ or .NET 6+
 - May need to be able to interact with the desktop
   - In situations such as being run through Windows Task Scheduler, the application will need an active window to start with, you can hide it afterward.
 ### NET Framework:
@@ -25,15 +25,15 @@ For .NET Framework, I've seen people encountering issues with how the package ge
   </PackageReference>
 </ItemGroup>
 ```
-### NET 5+:
-NET 5 brought along a lot of changes in how WinRT is meant to be accessed. More of that info can be found [here](https://docs.microsoft.com/en-us/windows/apps/desktop/modernize/desktop-to-uwp-enhance).
+### NET 6+:
+NET 6 brought along a lot of changes in how WinRT is meant to be accessed. More of that info can be found [here](https://docs.microsoft.com/en-us/windows/apps/desktop/modernize/desktop-to-uwp-enhance).
 
 If you're doing a GUI app you **should** be good to go and be able to just import the lib.
 
 However, for other cases, your `TargetFramework` in the .csproj file needs to be modified before importing the package.
-<br> (replacing net5.0 with desired .NET version)
+<br> (replacing net6.0 with desired .NET version)
 ```csproj
-<TargetFramework>net5.0-windows10.0.22000.0</TargetFramework>
+<TargetFramework>net6.0-windows10.0.22000.0</TargetFramework>
 ```
 
 ## How To Use
