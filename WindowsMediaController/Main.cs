@@ -227,6 +227,7 @@ namespace WindowsMediaController
 
             IsStarted = false;
             WindowsSessionManager.SessionsChanged -= SessionsChanged;
+            WindowsSessionManager.CurrentSessionChanged -= CurrentSessionChanged;
             WindowsSessionManager = null;
         }
 
