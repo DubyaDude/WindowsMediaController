@@ -63,8 +63,10 @@ namespace WindowsMediaController
         /// <summary>
         /// Starts the <see cref="MediaSession"/>.
         /// </summary>
-        public void Start()
+        public void Start(ILogger logger = null)
         {
+            Logger = logger;
+
             CheckStarted(true);
 
             //Populate CurrentMediaSessions with already open Sessions
@@ -76,8 +78,10 @@ namespace WindowsMediaController
         /// <summary>
         /// Starts the <see cref="MediaSession"/> asynchronously.
         /// </summary>
-        public async Task StartAsync()
+        public async Task StartAsync(ILogger logger = null)
         {
+            Logger = logger;
+
             CheckStarted(true);
 
             //Populate CurrentMediaSessions with already open Sessions
@@ -117,8 +121,7 @@ namespace WindowsMediaController
 
         private void CompleteStart()
         {
-            SessionsChanged(WindowsSessionManager);
-            CurrentSessionChanged(WindowsSessionManager);
+            ForceUpdate();
             WindowsSessionManager.SessionsChanged += SessionsChanged;
             WindowsSessionManager.CurrentSessionChanged += CurrentSessionChanged;
             IsStarted = true;
@@ -130,6 +133,7 @@ namespace WindowsMediaController
 
             try
             {
+                throw new Exception("Test Exception");
                 OnFocusedSessionChanged?.Invoke(currentMediaSession);
             }
             catch (Exception exeption)
