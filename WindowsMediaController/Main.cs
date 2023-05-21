@@ -133,7 +133,6 @@ namespace WindowsMediaController
 
             try
             {
-                throw new Exception("Test Exception");
                 OnFocusedSessionChanged?.Invoke(currentMediaSession);
             }
             catch (Exception exeption)
