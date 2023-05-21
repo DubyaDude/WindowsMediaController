@@ -226,6 +226,7 @@ namespace WindowsMediaController
             return false;
         }
 
+        /// <inheritdoc/>
         public void Dispose()
         {
             OnAnySessionOpened = null;
@@ -244,6 +245,7 @@ namespace WindowsMediaController
             WindowsSessionManager.SessionsChanged -= SessionsChanged;
             WindowsSessionManager.CurrentSessionChanged -= CurrentSessionChanged;
             WindowsSessionManager = null;
+            Logger = null;
         }
 
         public sealed class MediaSession
