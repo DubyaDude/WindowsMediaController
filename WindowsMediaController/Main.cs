@@ -7,7 +7,7 @@ using Windows.Media.Control;
 
 namespace WindowsMediaController
 {
-    public class MediaManager : IDisposable
+    public sealed class MediaManager : IDisposable
     {
         public delegate void SessionChangeDelegate(MediaSession mediaSession);
         public delegate void PlaybackChangeDelegate(MediaSession mediaSession, GlobalSystemMediaTransportControlsSessionPlaybackInfo playbackInfo);
@@ -247,7 +247,7 @@ namespace WindowsMediaController
             WindowsSessionManager = null;
         }
 
-        public class MediaSession
+        public sealed class MediaSession
         {
             /// <summary>
             /// Triggered when this media source gets removed from the <see cref="CurrentMediaSessions"/> dictionary.
