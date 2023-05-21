@@ -106,6 +106,6 @@ delegate void OnPlaybackStateChanged(MediaManager.MediaSession sender, GlobalSys
 
 
 ## Credit
-- Luca Marini ([gitlab](https://gitlab.com/naatiivee)) - Helped me understand the Windows API
+- Luca Marini ([gitlab](https://stackoverflow.com/users/13997827/luca-marini)) - Helped me understand the Windows API
 - Google ([materialui](https://github.com/google/material-design-icons)) - Utilizing their play icon to create our icon
 - Kinnara ([ModernWpf](https://github.com/Kinnara/ModernWpf)) - Utilized the ModernWpf library to create the UI sample
