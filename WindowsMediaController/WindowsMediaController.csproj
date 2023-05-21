@@ -14,8 +14,9 @@
     <Authors>DubyaDude</Authors>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageProjectUrl>https://github.com/DubyaDude/WindowsMediaController</PackageProjectUrl>
+	<RepositoryUrl>https://github.com/DubyaDude/WindowsMediaController/</RepositoryUrl>
+	<RepositoryType>Git</RepositoryType>
     <PackageReadmeFile>README.md</PackageReadmeFile>
-    <RepositoryUrl>https://github.com/DubyaDude/WindowsMediaController/tree/master/WindowsMediaController</RepositoryUrl>
     <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
     <ApplicationIcon>Icon.ico</ApplicationIcon>
     <Description>
@@ -23,6 +24,12 @@
 		Allows Playback Control on individual Media Sessions (Spotify, Chrome etc), Getting media information of currently playing (Song, Author, Thumbnail etc), and more</Description>
     <PackageIcon>Icon.png</PackageIcon>
     <PackageTags>music;audio;media;controller;windows;windows10;windows11;smtc;mtc</PackageTags>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+
+	<PublishRepositoryUrl>true</PublishRepositoryUrl>
+	<EmbedUntrackedSources>true</EmbedUntrackedSources>
+	<IncludeSymbols>true</IncludeSymbols>
+	<SymbolPackageFormat>snupkg</SymbolPackageFormat>
   </PropertyGroup>
   <ItemGroup>
     <Content Include="Icon.ico" />
