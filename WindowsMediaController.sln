@@ -6,8 +6,19 @@ MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WindowsMediaController", "WindowsMediaController\WindowsMediaController.csproj", "{C719D9AD-7724-47B7-90B7-20EF3C8EB6B5}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sample.CMD", "Sample.CMD\Sample.CMD.csproj", "{7A3CB12C-CDF2-4CB3-8E4E-0932A99FC279}"
+	ProjectSection(ProjectDependencies) = postProject
+		{C719D9AD-7724-47B7-90B7-20EF3C8EB6B5} = {C719D9AD-7724-47B7-90B7-20EF3C8EB6B5}
+	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sample.UI", "Sample.UI\Sample.UI.csproj", "{0454D061-7BAB-4A24-995C-6FC5DC90CC55}"
+	ProjectSection(ProjectDependencies) = postProject
+		{C719D9AD-7724-47B7-90B7-20EF3C8EB6B5} = {C719D9AD-7724-47B7-90B7-20EF3C8EB6B5}
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{AFE80E2D-35FF-497A-8057-E21625AA0C3D}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

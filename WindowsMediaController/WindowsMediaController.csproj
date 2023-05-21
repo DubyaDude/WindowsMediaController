@@ -33,6 +33,7 @@
     <Content Include="Icon.ico" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\.editorconfig" Link=".editorconfig" />
     <None Include="..\docs\images\Icon.png">
       <Pack>True</Pack>
       <PackagePath>\</PackagePath>
