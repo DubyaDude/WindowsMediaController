@@ -140,20 +140,36 @@ namespace WindowsMediaController
 
         private MediaSession GetFocusedSession(GlobalSystemMediaTransportControlsSessionManager sender)
         {
-            var currentSession = sender.GetCurrentSession();
-
-            MediaSession currentMediaSession = null;
-            if (currentSession != null && _CurrentMediaSessions.TryGetValue(currentSession.SourceAppUserModelId, out MediaSession mediaSession))
+            GlobalSystemMediaTransportControlsSession currentSession = null;
+            try
             {
-                currentMediaSession = mediaSession;
+                currentSession = sender.GetCurrentSession();
+            }
+            catch (Exception exception)
+            {
+                Logger?.LogError(exception, "Error when getting CurrentSession");
             }
 
-            return currentMediaSession;
+            if (currentSession != null && _CurrentMediaSessions.TryGetValue(currentSession.SourceAppUserModelId, out MediaSession mediaSession))
+            {
+                return mediaSession;
+            }
+
+            return null;
         }
 
         private void SessionsChanged(GlobalSystemMediaTransportControlsSessionManager winSessionManager, SessionsChangedEventArgs args = null)
         {
-            var controlSessionList = winSessionManager.GetSessions();
+            IReadOnlyList<GlobalSystemMediaTransportControlsSession> controlSessionList;
+            try
+            {
+                controlSessionList = winSessionManager.GetSessions();
+            }
+            catch (Exception exception)
+            {
+                Logger?.LogError(exception, "Error when getting Sessions");
+                return;
+            }
 
             //Checking for any new sessions, if found a new one add it to our dictiony and fire OnNewSource
             foreach (var controlSession in controlSessionList)
