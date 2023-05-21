@@ -233,6 +233,7 @@ namespace WindowsMediaController
             OnAnySessionClosed = null;
             OnAnyMediaPropertyChanged = null;
             OnAnyPlaybackStateChanged = null;
+            OnFocusedSessionChanged = null;
 
             var keys = _CurrentMediaSessions.Keys;
             foreach (var key in keys)
