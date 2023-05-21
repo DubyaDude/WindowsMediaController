@@ -131,9 +131,9 @@ namespace WindowsMediaController
             {
                 OnFocusedSessionChanged?.Invoke(currentMediaSession);
             }
-            catch (Exception exeption)
+            catch (Exception exception)
             {
-                Logger?.LogError(exeption, "Error in OnFocusedSessionChanged Invoke");
+                Logger?.LogError(exception, "Error in OnFocusedSessionChanged Invoke");
             }
         }
 
@@ -182,9 +182,9 @@ namespace WindowsMediaController
                     {
                         OnAnySessionOpened?.Invoke(mediaSession);
                     }
-                    catch (Exception exeption)
+                    catch (Exception exception)
                     {
-                        Logger?.LogError(exeption, "Error in OnAnySessionOpened Invoke");
+                        Logger?.LogError(exception, "Error in OnAnySessionOpened Invoke");
                     }
 
                     mediaSession.OnSongChangeAsync(controlSession);
@@ -216,9 +216,9 @@ namespace WindowsMediaController
                 {
                     OnAnySessionClosed?.Invoke(mediaSession);
                 }
-                catch (Exception exeption)
+                catch (Exception exception)
                 {
-                    Logger?.LogError(exeption, "Error in OnAnySessionClosed Invoke");
+                    Logger?.LogError(exception, "Error in OnAnySessionClosed Invoke");
                 }
 
                 return true;
@@ -305,24 +305,24 @@ namespace WindowsMediaController
                         {
                             OnPlaybackStateChanged?.Invoke(this, playbackInfo);
                         }
-                        catch (Exception exeption)
+                        catch (Exception exception)
                         {
-                            MediaManagerInstance.Logger?.LogError(exeption, "[{mediaId}] Error in OnPlaybackStateChanged Invoke", Id);
+                            MediaManagerInstance.Logger?.LogError(exception, "[{mediaId}] Error in OnPlaybackStateChanged Invoke", Id);
                         }
 
                         try
                         {
                             MediaManagerInstance.OnAnyPlaybackStateChanged?.Invoke(this, playbackInfo);
                         }
-                        catch (Exception exeption)
+                        catch (Exception exception)
                         {
-                            MediaManagerInstance.Logger?.LogError(exeption, "[{mediaId}] Error in OnAnyPlaybackStateChanged Invoke", Id);
+                            MediaManagerInstance.Logger?.LogError(exception, "[{mediaId}] Error in OnAnyPlaybackStateChanged Invoke", Id);
                         }
                     }
                 }
-                catch (Exception exeption)
+                catch (Exception exception)
                 {
-                    MediaManagerInstance.Logger?.LogError(exeption, "[{mediaId}] Error when getting PlaybackInfo", Id);
+                    MediaManagerInstance.Logger?.LogError(exception, "[{mediaId}] Error when getting PlaybackInfo", Id);
                 }
             }
 
@@ -336,30 +336,30 @@ namespace WindowsMediaController
                     {
                         OnMediaPropertyChanged?.Invoke(this, mediaProperties);
                     }
-                    catch (Exception exeption)
+                    catch (Exception exception)
                     {
-                        MediaManagerInstance.Logger?.LogError(exeption, "[{mediaId}] Error in OnMediaPropertyChanged Invoke", Id);
+                        MediaManagerInstance.Logger?.LogError(exception, "[{mediaId}] Error in OnMediaPropertyChanged Invoke", Id);
                     }
 
                     try
                     {
                         MediaManagerInstance.OnAnyMediaPropertyChanged?.Invoke(this, mediaProperties);
                     }
-                    catch (Exception exeption)
+                    catch (Exception exception)
                     {
-                        MediaManagerInstance.Logger?.LogError(exeption, "[{mediaId}] Error in OnAnyMediaPropertyChanged Invoke", Id);
+                        MediaManagerInstance.Logger?.LogError(exception, "[{mediaId}] Error in OnAnyMediaPropertyChanged Invoke", Id);
                     }
                 }
-                catch (Exception exeption)
+                catch (Exception exception)
                 {
                     // Silence "The RPC server is unavailable. (0x800706BA)" and "The device is not ready. (0x80070015)"
-                    if (exeption.Message.Contains("0x800706BA") || exeption.Message.Contains("0x80070015"))
+                    if (exception.Message.Contains("0x800706BA") || exception.Message.Contains("0x80070015"))
                     {
-                        MediaManagerInstance.Logger?.LogWarning(exeption, "[{mediaId}] Ignorable error when getting MediaProperties", Id);
+                        MediaManagerInstance.Logger?.LogWarning(exception, "[{mediaId}] Ignorable error when getting MediaProperties", Id);
                     }
                     else
                     {
-                        MediaManagerInstance.Logger?.LogError(exeption, "[{mediaId}] Error when getting MediaProperties", Id);
+                        MediaManagerInstance.Logger?.LogError(exception, "[{mediaId}] Error when getting MediaProperties", Id);
                     }
                 }
             }
@@ -379,9 +379,9 @@ namespace WindowsMediaController
                     {
                         OnSessionClosed?.Invoke(this);
                     }
-                    catch (Exception exeption)
+                    catch (Exception exception)
                     {
-                        MediaManagerInstance.Logger?.LogError(exeption, "[{mediaId}] Error in OnSessionClosed Invoke", Id);
+                        MediaManagerInstance.Logger?.LogError(exception, "[{mediaId}] Error in OnSessionClosed Invoke", Id);
                     }
                 }
             }
