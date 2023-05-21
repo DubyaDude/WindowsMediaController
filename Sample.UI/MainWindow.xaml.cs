@@ -49,7 +49,7 @@ namespace Sample.UI
                 NavigationViewItem? itemToRemove = null;
 
                 foreach (NavigationViewItem? item in SongList.MenuItems)
-                    if (((MediaSession?)item?.Tag)?.ToString() == session.Id)
+                    if (((MediaSession?)item?.Tag)?.Id == session.Id)
                         itemToRemove = item;
 
                 if (itemToRemove != null)
