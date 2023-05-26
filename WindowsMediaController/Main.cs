@@ -203,7 +203,10 @@ namespace WindowsMediaController
                 }
             }
 
-            sessionsToRemove.ForEach(x => x.Dispose());
+            foreach(var session in sessionsToRemove)
+            {
+                session.Dispose();
+            }
         }
 
         private bool RemoveSource(MediaSession mediaSession)
