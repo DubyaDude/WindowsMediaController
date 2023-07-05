@@ -2,7 +2,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
 	<TargetFrameworks>
-		net462;net47;net471;net472;net48;
+		net462;net47;net471;net472;net48;net481;
 		net6.0-windows10.0.17763.0;net6.0-windows10.0.18362.0;net6.0-windows10.0.19041.0;net6.0-windows10.0.22000.0;
 		net7.0-windows10.0.17763.0;net7.0-windows10.0.18362.0;net7.0-windows10.0.19041.0;net7.0-windows10.0.22000.0;
 		net8.0-windows10.0.17763.0;net8.0-windows10.0.18362.0;net8.0-windows10.0.19041.0;net8.0-windows10.0.22000.0
@@ -43,7 +43,7 @@
       <PackagePath>\</PackagePath>
     </None>
   </ItemGroup>
-  <ItemGroup Condition="'$(TargetFramework)' == 'net461' or '$(TargetFramework)' == 'net462' or '$(TargetFramework)' == 'net47' or '$(TargetFramework)' == 'net471' or '$(TargetFramework)' == 'net472' or '$(TargetFramework)' == 'net48' or '$(TargetFramework)' == 'netcoreapp3.1'">
+  <ItemGroup Condition="'$(TargetFramework)' == 'net462' or '$(TargetFramework)' == 'net47' or '$(TargetFramework)' == 'net471' or '$(TargetFramework)' == 'net472' or '$(TargetFramework)' == 'net48' or '$(TargetFramework)' == 'net481'">
     <PackageReference Include="Microsoft.Windows.SDK.Contracts" Version="10.0.17763.1000" />
   </ItemGroup>
   <ItemGroup>
