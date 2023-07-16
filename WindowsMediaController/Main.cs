@@ -11,6 +11,7 @@ namespace WindowsMediaController
         public delegate void SessionChangeDelegate(MediaSession mediaSession);
         public delegate void PlaybackChangeDelegate(MediaSession mediaSession, GlobalSystemMediaTransportControlsSessionPlaybackInfo playbackInfo);
         public delegate void SongChangeDelegate(MediaSession mediaSession, GlobalSystemMediaTransportControlsSessionMediaProperties mediaProperties);
+        public delegate void TimelineChangeDelegate(MediaSession mediaSession, GlobalSystemMediaTransportControlsSessionTimelineProperties timelineProperties);
 
         /// <summary>
         /// Triggered when a new media source gets added to the <see cref="CurrentMediaSessions"/> dictionary.
@@ -36,6 +37,11 @@ namespace WindowsMediaController
         /// Triggered when a song changes of any <see cref="MediaSession"/>.
         /// </summary>
         public event SongChangeDelegate OnAnyMediaPropertyChanged;
+
+        /// <summary>
+        /// Triggered when the timeline changes of any <see cref="MediaSession"/>.
+        /// </summary>
+        public event TimelineChangeDelegate OnAnyTimelinePropertyChanged;
 
         /// <summary>
         /// A dictionary of the current <c>(<see cref="string"/> MediaSessionIds, <see cref="MediaSession"/> MediaSessionInstance)</c>
@@ -186,7 +192,8 @@ namespace WindowsMediaController
                         Logger?.LogError(exception, "Error in OnAnySessionOpened Invoke");
                     }
 
-                    mediaSession.OnSongChangeAsync(controlSession);
+                    mediaSession.OnSongChangeTaskAsync(controlSession).GetAwaiter().GetResult();
+                    mediaSession.OnTimelinePropertiesChanged(controlSession);
                 }
             }
 
@@ -274,6 +281,11 @@ namespace WindowsMediaController
             public event SongChangeDelegate OnMediaPropertyChanged;
 
             /// <summary>
+            /// Triggered when the timeline changes of the <see cref="MediaSession"/>.
+            /// </summary>
+            public event TimelineChangeDelegate OnTimelinePropertyChanged;
+
+            /// <summary>
             /// The <see cref="GlobalSystemMediaTransportControlsSession"/> component from the Windows library.
             /// </summary>
             /// <seealso href="https://docs.microsoft.com/en-us/uwp/api/windows.media.control.globalsystemmediatransportcontrolssession"/>
@@ -294,6 +306,7 @@ namespace WindowsMediaController
                 Id = ControlSession.SourceAppUserModelId;
                 ControlSession.MediaPropertiesChanged += OnSongChangeAsync;
                 ControlSession.PlaybackInfoChanged += OnPlaybackInfoChanged;
+                ControlSession.TimelinePropertiesChanged += OnTimelinePropertiesChanged;
             }
 
             private void OnPlaybackInfoChanged(GlobalSystemMediaTransportControlsSession controlSession, PlaybackInfoChangedEventArgs args = null)
@@ -335,6 +348,11 @@ namespace WindowsMediaController
 
             internal async void OnSongChangeAsync(GlobalSystemMediaTransportControlsSession controlSession, MediaPropertiesChangedEventArgs args = null)
             {
+                await OnSongChangeTaskAsync(controlSession);
+            }
+
+            internal async Task OnSongChangeTaskAsync(GlobalSystemMediaTransportControlsSession controlSession)
+            {
                 try
                 {
                     var mediaProperties = await controlSession.TryGetMediaPropertiesAsync();
@@ -371,6 +389,36 @@ namespace WindowsMediaController
                 }
             }
 
+            internal void OnTimelinePropertiesChanged(GlobalSystemMediaTransportControlsSession sender, TimelinePropertiesChangedEventArgs args = null)
+            {
+                try
+                {
+                    var timelineProperties = sender.GetTimelineProperties();
+
+                    try
+                    {
+                        OnTimelinePropertyChanged?.Invoke(this, timelineProperties);
+                    }
+                    catch (Exception exception)
+                    {
+                        MediaManagerInstance.Logger?.LogError(exception, "[{mediaId}] Error in OnPlaybackStateChanged Invoke", Id);
+                    }
+
+                    try
+                    {
+                        MediaManagerInstance.OnAnyTimelinePropertyChanged?.Invoke(this, timelineProperties);
+                    }
+                    catch (Exception exception)
+                    {
+                        MediaManagerInstance.Logger?.LogError(exception, "[{mediaId}] Error in OnAnyPlaybackStateChanged Invoke", Id);
+                    }
+                }
+                catch (Exception exception)
+                {
+                    MediaManagerInstance.Logger?.LogError(exception, "[{mediaId}] Error when getting TimelineProperties", Id);
+                }
+            }
+
             internal void Dispose()
             {
                 if (MediaManagerInstance.RemoveSource(this))
@@ -380,6 +428,7 @@ namespace WindowsMediaController
                     OnSessionClosed = null;
                     ControlSession.PlaybackInfoChanged -= OnPlaybackInfoChanged;
                     ControlSession.MediaPropertiesChanged -= OnSongChangeAsync;
+                    ControlSession.TimelinePropertiesChanged -= OnTimelinePropertiesChanged;
                     ControlSession = null;
 
                     try
