@@ -192,8 +192,8 @@ namespace WindowsMediaController
                         Logger?.LogError(exception, "Error in OnAnySessionOpened Invoke");
                     }
 
-                    mediaSession.OnSongChangeTaskAsync(controlSession).GetAwaiter().GetResult();
                     mediaSession.OnTimelinePropertiesChanged(controlSession);
+                    mediaSession.OnSongChangeAsync(controlSession);
                 }
             }
 
@@ -347,11 +347,6 @@ namespace WindowsMediaController
             }
 
             internal async void OnSongChangeAsync(GlobalSystemMediaTransportControlsSession controlSession, MediaPropertiesChangedEventArgs args = null)
-            {
-                await OnSongChangeTaskAsync(controlSession);
-            }
-
-            internal async Task OnSongChangeTaskAsync(GlobalSystemMediaTransportControlsSession controlSession)
             {
                 try
                 {
