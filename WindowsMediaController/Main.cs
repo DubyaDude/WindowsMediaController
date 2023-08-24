@@ -396,7 +396,7 @@ namespace WindowsMediaController
                     }
                     catch (Exception exception)
                     {
-                        MediaManagerInstance.Logger?.LogError(exception, "[{mediaId}] Error in OnPlaybackStateChanged Invoke", Id);
+                        MediaManagerInstance.Logger?.LogError(exception, "[{mediaId}] Error in OnTimelinePropertyChanged Invoke", Id);
                     }
 
                     try
@@ -405,7 +405,7 @@ namespace WindowsMediaController
                     }
                     catch (Exception exception)
                     {
-                        MediaManagerInstance.Logger?.LogError(exception, "[{mediaId}] Error in OnAnyPlaybackStateChanged Invoke", Id);
+                        MediaManagerInstance.Logger?.LogError(exception, "[{mediaId}] Error in OnAnyTimelinePropertyChanged Invoke", Id);
                     }
                 }
                 catch (Exception exception)
