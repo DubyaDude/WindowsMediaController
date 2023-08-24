@@ -46,6 +46,7 @@ mediaManager.OnAnySessionClosed += MediaManager_OnAnySessionClosed;
 mediaManager.OnFocusedSessionChanged += MediaManager_OnFocusedSessionChanged;
 mediaManager.OnAnyMediaPropertyChanged += MediaManager_OnAnyMediaPropertyChanged;
 mediaManager.OnAnyPlaybackStateChanged += MediaManager_OnAnyPlaybackStateChanged;
+mediaManager.OnAnyTimelinePropertyChanged += MediaManager_OnAnyTimelinePropertyChanged;
 
 mediaManager.Start();
 OR
@@ -69,6 +70,7 @@ delegate void OnAnySessionClosed(MediaManager.MediaSession session);
 delegate void OnFocusedSessionChanged(MediaManager.MediaSession session);
 delegate void OnAnyMediaPropertyChanged(MediaManager.MediaSession sender, GlobalSystemMediaTransportControlsSessionMediaProperties args);
 delegate void OnAnyPlaybackStateChanged(MediaManager.MediaSession sender, GlobalSystemMediaTransportControlsSessionPlaybackInfo args);
+delegate void OnAnyTimelinePropertyChanged(MediaSession mediaSession, GlobalSystemMediaTransportControlsSessionTimelineProperties timelineProperties);
 ```
 MediaManager.MediaSession:
 ```csharp
@@ -78,6 +80,7 @@ GlobalSystemMediaTransportControlsSession ControlSession { get; }
 delegate void OnSessionClosed(MediaManager.MediaSession session);
 delegate void OnMediaPropertyChanged(MediaManager.MediaSession sender, GlobalSystemMediaTransportControlsSessionMediaProperties args);
 delegate void OnPlaybackStateChanged(MediaManager.MediaSession sender, GlobalSystemMediaTransportControlsSessionPlaybackInfo args);
+delegate void OnTimelinePropertyChanged(MediaSession mediaSession, GlobalSystemMediaTransportControlsSessionTimelineProperties timelineProperties);
 ```
 
 ### Getting Some Info:
