@@ -17,11 +17,11 @@ This allows for a better understanding and control of the Media Sessions and can
   - In situations such as being run through Windows Task Scheduler, the application will need an active window to start with, you can hide it afterward.
 ### NET Framework:
 For .NET Framework, I've seen people encountering issues with how the package gets imported. If you run across this issue, add the package by adding this to the .csproj file.
-<br> (replacing '2.5.1' with the preferred NuGet version)
+<br> (replacing '2.5.2' with the preferred NuGet version)
 ```csproj
 <ItemGroup>
   <PackageReference Include="Dubya.WindowsMediaController">
-    <Version>2.5.1</Version>
+    <Version>2.5.2</Version>
   </PackageReference>
 </ItemGroup>
 ```
