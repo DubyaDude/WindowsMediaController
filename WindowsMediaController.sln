@@ -5,7 +5,7 @@ VisualStudioVersion = 17.1.31911.260
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WindowsMediaController", "WindowsMediaController\WindowsMediaController.csproj", "{C719D9AD-7724-47B7-90B7-20EF3C8EB6B5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sample.CMD", "Sample.CMD\Sample.CMD.csproj", "{7A3CB12C-CDF2-4CB3-8E4E-0932A99FC279}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sample.CMD", "Sample.CMD\Sample.CMD.csproj", "{7A3CB12C-CDF2-4CB3-8E4E-0932A99FC279}"
 	ProjectSection(ProjectDependencies) = postProject
 		{C719D9AD-7724-47B7-90B7-20EF3C8EB6B5} = {C719D9AD-7724-47B7-90B7-20EF3C8EB6B5}
 	EndProjectSection
