@@ -12,7 +12,7 @@ This allows for a better understanding and control of the Media Sessions and can
 ## Requirements
 - Windows 10 (Build 17763+) or Windows 11
 - The ability to talk to Windows Runtime. (In a majority of cases, this will not be an issue)
-- .NET Framework 4.6.2+ or .NET 6+
+- .NET Framework 4.6.1+ or .NET 5+
 - May need to be able to interact with the desktop
   - In situations such as being run through Windows Task Scheduler, the application will need an active window to start with, you can hide it afterward.
 ### NET Framework:
@@ -25,8 +25,8 @@ For .NET Framework, I've seen people encountering issues with how the package ge
   </PackageReference>
 </ItemGroup>
 ```
-### NET 6+:
-NET 6 brought along a lot of changes in how WinRT is meant to be accessed. More of that info can be found [here](https://docs.microsoft.com/en-us/windows/apps/desktop/modernize/desktop-to-uwp-enhance).
+### NET 5+:
+NET 5 brought along a lot of changes in how WinRT is meant to be accessed. More of that info can be found [here](https://docs.microsoft.com/en-us/windows/apps/desktop/modernize/desktop-to-uwp-enhance).
 
 If you're doing a GUI app you **should** be good to go and be able to just import the lib.
 
