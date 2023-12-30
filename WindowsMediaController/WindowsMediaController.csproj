@@ -2,13 +2,15 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
 	<TargetFrameworks>
-		net462;net47;net471;net472;net48;net481;
+		net461;net462;net47;net471;net472;net48;net481;
+		netcoreapp3.0;netcoreapp3.1;
+		net5.0-windows10.0.17763.0;net5.0-windows10.0.18362.0;net5.0-windows10.0.19041.0;net5.0-windows10.0.22000.0;
 		net6.0-windows10.0.17763.0;net6.0-windows10.0.18362.0;net6.0-windows10.0.19041.0;net6.0-windows10.0.22000.0;
 		net7.0-windows10.0.17763.0;net7.0-windows10.0.18362.0;net7.0-windows10.0.19041.0;net7.0-windows10.0.22000.0;
 		net8.0-windows10.0.17763.0;net8.0-windows10.0.18362.0;net8.0-windows10.0.19041.0;net8.0-windows10.0.22000.0
 	</TargetFrameworks>
     <PackageId>Dubya.WindowsMediaController</PackageId>
-    <Version>2.5.2</Version>
+    <Version>2.5.3</Version>
     <Authors>DubyaDude</Authors>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageProjectUrl>https://github.com/DubyaDude/WindowsMediaController</PackageProjectUrl>
@@ -46,11 +48,11 @@
       <PackagePath>\</PackagePath>
     </None>
   </ItemGroup>
-  <ItemGroup Condition="'$(TargetFramework.TrimEnd(`0123456789`))' == 'net'">
+  <ItemGroup Condition="'$(TargetFramework.TrimEnd(`0123456789.`))' == 'net' or '$(TargetFramework.TrimEnd(`0123456789.`))' == 'netcoreapp'">
     <PackageReference Include="Microsoft.Windows.SDK.Contracts" Version="10.0.17763.1000" />
 	<PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="3.1.22" />
   </ItemGroup>
-  <ItemGroup Condition="'$(TargetFramework.TrimEnd(`0123456789`))' != 'net'">
+  <ItemGroup Condition="'$(TargetFramework.TrimEnd(`0123456789.`))' != 'net' and '$(TargetFramework.TrimEnd(`0123456789.`))' != 'netcoreapp'">
     <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="6.0.0" />
   </ItemGroup>
   <ItemGroup>
