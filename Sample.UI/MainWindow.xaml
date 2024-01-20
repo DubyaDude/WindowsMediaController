@@ -34,9 +34,9 @@
             <Image x:Name="SongImage" Height="160" Canvas.Left="10" Canvas.Top="11" Width="160"/>
             <Label x:Name="SongTitle" Content="TITLE" Canvas.Left="179" Canvas.Top="2" Height="64" Width="449" FontSize="50" FontFamily="Segoe UI BOLD"/>
             <Label x:Name="SongAuthor" Content="Author" Canvas.Left="179" Canvas.Top="59" Height="35" Width="449" FontSize="25" FontFamily="Segoe UI"/>
-            <Button x:Name="ControlBack" Content="◀◀" Canvas.Left="179" Canvas.Top="105" Height="65" Width="65" Click="Back_Click" FontSize ="27" FontFamily="Segoe UI BOLD"/>
-            <Button x:Name="ControlPlayPause" Content="▶️" Canvas.Left="249" Canvas.Top="105" Height="65" Width="65" Click="PlayPause_Click" FontSize ="27" FontFamily="Segoe UI BOLD"/>
-            <Button x:Name="ControlForward" Content="▶️▶️" Canvas.Left="319" Canvas.Top="105" Height="65" Width="65" Click="Forward_Click" FontSize ="27" FontFamily="Segoe UI BOLD"/>
+            <Button x:Name="ControlBack" IsEnabled="False" Content="◀◀" Canvas.Left="179" Canvas.Top="105" Height="65" Width="65" Click="Back_Click" FontSize ="27" FontFamily="Segoe UI BOLD"/>
+            <Button x:Name="ControlPlayPause" IsEnabled="False" Content="▶️" Canvas.Left="249" Canvas.Top="105" Height="65" Width="65" Click="PlayPause_Click" FontSize ="27" FontFamily="Segoe UI BOLD"/>
+            <Button x:Name="ControlForward" IsEnabled="False" Content="▶️▶️" Canvas.Left="319" Canvas.Top="105" Height="65" Width="65" Click="Forward_Click" FontSize ="27" FontFamily="Segoe UI BOLD"/>
         </Canvas>
     </ui:NavigationView>
 

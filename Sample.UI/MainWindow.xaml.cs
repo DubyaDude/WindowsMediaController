@@ -86,6 +86,9 @@ namespace Sample.UI
                 currentSession.OnMediaPropertyChanged += CurrentSession_OnMediaPropertyChanged;
                 currentSession.OnPlaybackStateChanged += CurrentSession_OnPlaybackStateChanged;
                 CurrentSession_OnPlaybackStateChanged(currentSession);
+                ControlPlayPause.IsEnabled = true;
+                ControlBack.IsEnabled = true;
+                ControlForward.IsEnabled = true;
             }
             else
             {
@@ -93,6 +96,9 @@ namespace Sample.UI
                 SongTitle.Content = "TITLE";
                 SongAuthor.Content = "Author";
                 ControlPlayPause.Content = "▶️";
+                ControlPlayPause.IsEnabled = false;
+                ControlBack.IsEnabled = false;
+                ControlForward.IsEnabled = false;
             }
         }
 
@@ -136,22 +142,31 @@ namespace Sample.UI
 
         private async void Back_Click(object sender, RoutedEventArgs e)
         {
-            await currentSession?.ControlSession.TrySkipPreviousAsync();
+            if(currentSession != null)
+            {
+                await currentSession.ControlSession.TrySkipPreviousAsync();
+            }
         }
 
         private async void PlayPause_Click(object sender, RoutedEventArgs e)
         {
-            var controlsInfo = currentSession?.ControlSession.GetPlaybackInfo().Controls;
+            if (currentSession != null)
+            {
+                var controlsInfo = currentSession.ControlSession.GetPlaybackInfo().Controls;
 
-            if (controlsInfo?.IsPauseEnabled == true)
-                await currentSession?.ControlSession.TryPauseAsync();
-            else if (controlsInfo?.IsPlayEnabled == true)
-                await currentSession?.ControlSession.TryPlayAsync();
+                if (controlsInfo.IsPauseEnabled == true)
+                    await currentSession.ControlSession.TryPauseAsync();
+                else if (controlsInfo.IsPlayEnabled == true)
+                    await currentSession.ControlSession.TryPlayAsync();
+            }
         }
 
         private async void Forward_Click(object sender, RoutedEventArgs e)
         {
-            await currentSession?.ControlSession.TrySkipNextAsync();
+            if (currentSession != null)
+            {
+                await currentSession.ControlSession.TrySkipNextAsync();
+            }
         }
     }
 
