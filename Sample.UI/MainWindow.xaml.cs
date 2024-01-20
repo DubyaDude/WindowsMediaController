@@ -142,31 +142,31 @@ namespace Sample.UI
 
         private async void Back_Click(object sender, RoutedEventArgs e)
         {
-            if(currentSession != null)
-            {
-                await currentSession.ControlSession.TrySkipPreviousAsync();
-            }
+            if (currentSession == null)
+                return;
+
+            await currentSession.ControlSession.TrySkipPreviousAsync();
         }
 
         private async void PlayPause_Click(object sender, RoutedEventArgs e)
         {
-            if (currentSession != null)
-            {
-                var controlsInfo = currentSession.ControlSession.GetPlaybackInfo().Controls;
+            if (currentSession == null)
+                return;
 
-                if (controlsInfo.IsPauseEnabled == true)
-                    await currentSession.ControlSession.TryPauseAsync();
-                else if (controlsInfo.IsPlayEnabled == true)
-                    await currentSession.ControlSession.TryPlayAsync();
-            }
+            var controlsInfo = currentSession.ControlSession.GetPlaybackInfo().Controls;
+
+            if (controlsInfo.IsPauseEnabled == true)
+                await currentSession.ControlSession.TryPauseAsync();
+            else if (controlsInfo.IsPlayEnabled == true)
+                await currentSession.ControlSession.TryPlayAsync();
         }
 
         private async void Forward_Click(object sender, RoutedEventArgs e)
         {
-            if (currentSession != null)
-            {
-                await currentSession.ControlSession.TrySkipNextAsync();
-            }
+            if (currentSession == null)
+                return;
+
+            await currentSession.ControlSession.TrySkipNextAsync();
         }
     }
 
