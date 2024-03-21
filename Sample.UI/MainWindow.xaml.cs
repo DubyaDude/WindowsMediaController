@@ -1,5 +1,6 @@
 ﻿using ModernWpf.Controls;
 using System;
+using System.Drawing;
 using System.Windows;
 using System.Windows.Media.Imaging;
 using Windows.Media.Control;
@@ -172,27 +173,43 @@ namespace Sample.UI
 
     internal static class Helper
     {
-        internal static BitmapImage? GetThumbnail(IRandomAccessStreamReference Thumbnail)
+        internal static BitmapImage? GetThumbnail(IRandomAccessStreamReference Thumbnail, bool convertToPng = false)
         {
             if (Thumbnail == null)
                 return null;
 
-            var imageStream = Thumbnail.OpenReadAsync().GetAwaiter().GetResult();
-            byte[] fileBytes = new byte[imageStream.Size];
-            using (DataReader reader = new DataReader(imageStream))
+            var thumbnailStream = Thumbnail.OpenReadAsync().GetAwaiter().GetResult();
+            byte[] thumbnailBytes = new byte[thumbnailStream.Size];
+            using (DataReader reader = new DataReader(thumbnailStream))
             {
-                reader.LoadAsync((uint)imageStream.Size).GetAwaiter().GetResult();
-                reader.ReadBytes(fileBytes);
+                reader.LoadAsync((uint)thumbnailStream.Size).GetAwaiter().GetResult();
+                reader.ReadBytes(thumbnailBytes);
+            }
+
+            byte[] imageBytes = thumbnailBytes;
+
+            if (convertToPng)
+            {
+                using (var fileMemoryStream = new System.IO.MemoryStream(thumbnailBytes))
+                {
+                    Bitmap b = (Bitmap)Bitmap.FromStream(fileMemoryStream);
+                    using (var pngMemoryStream = new System.IO.MemoryStream())
+                    {
+                        b.Save(pngMemoryStream, System.Drawing.Imaging.ImageFormat.Png);
+                        imageBytes = pngMemoryStream.ToArray();
+                    }
+                }
             }
 
             var image = new BitmapImage();
-            using (var ms = new System.IO.MemoryStream(fileBytes))
+            using (var ms = new System.IO.MemoryStream(imageBytes))
             {
                 image.BeginInit();
                 image.CacheOption = BitmapCacheOption.OnLoad;
                 image.StreamSource = ms;
                 image.EndInit();
             }
+            
             return image;
         }
     }
