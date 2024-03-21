@@ -173,7 +173,7 @@ namespace Sample.UI
 
     internal static class Helper
     {
-        internal static BitmapImage? GetThumbnail(IRandomAccessStreamReference Thumbnail, bool convertToPng = false)
+        internal static BitmapImage? GetThumbnail(IRandomAccessStreamReference Thumbnail, bool convertToPng = true)
         {
             if (Thumbnail == null)
                 return null;
@@ -190,15 +190,12 @@ namespace Sample.UI
 
             if (convertToPng)
             {
-                using (var fileMemoryStream = new System.IO.MemoryStream(thumbnailBytes))
-                {
-                    Bitmap b = (Bitmap)Bitmap.FromStream(fileMemoryStream);
-                    using (var pngMemoryStream = new System.IO.MemoryStream())
-                    {
-                        b.Save(pngMemoryStream, System.Drawing.Imaging.ImageFormat.Png);
-                        imageBytes = pngMemoryStream.ToArray();
-                    }
-                }
+                using var fileMemoryStream = new System.IO.MemoryStream(thumbnailBytes);
+                Bitmap thumbnailBitmap = (Bitmap)Bitmap.FromStream(fileMemoryStream);
+
+                using var pngMemoryStream = new System.IO.MemoryStream();
+                thumbnailBitmap.Save(pngMemoryStream, System.Drawing.Imaging.ImageFormat.Png);
+                imageBytes = pngMemoryStream.ToArray();
             }
 
             var image = new BitmapImage();
