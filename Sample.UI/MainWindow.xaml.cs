@@ -193,9 +193,12 @@ namespace Sample.UI
                 using var fileMemoryStream = new System.IO.MemoryStream(thumbnailBytes);
                 Bitmap thumbnailBitmap = (Bitmap)Bitmap.FromStream(fileMemoryStream);
 
-                using var pngMemoryStream = new System.IO.MemoryStream();
-                thumbnailBitmap.Save(pngMemoryStream, System.Drawing.Imaging.ImageFormat.Png);
-                imageBytes = pngMemoryStream.ToArray();
+                if (!thumbnailBitmap.RawFormat.Equals(System.Drawing.Imaging.ImageFormat.Png))
+                {
+                    using var pngMemoryStream = new System.IO.MemoryStream();
+                    thumbnailBitmap.Save(pngMemoryStream, System.Drawing.Imaging.ImageFormat.Png);
+                    imageBytes = pngMemoryStream.ToArray();
+                }
             }
 
             var image = new BitmapImage();
