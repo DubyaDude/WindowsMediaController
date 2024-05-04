@@ -249,7 +249,7 @@ namespace WindowsMediaController
             OnAnyPlaybackStateChanged = null;
             OnFocusedSessionChanged = null;
 
-            var keys = _CurrentMediaSessions.Keys;
+            var keys = new List<string>(_CurrentMediaSessions.Keys);
             foreach (var key in keys)
             {
                 _CurrentMediaSessions[key].Dispose();
