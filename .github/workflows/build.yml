@@ -16,9 +16,9 @@ jobs:
     runs-on: windows-latest
 
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
     - name: Setup .NET
-      uses: actions/setup-dotnet@v3
+      uses: actions/setup-dotnet@v4
       with:
         dotnet-version: | 
           3.0.x
@@ -33,7 +33,7 @@ jobs:
     - name: Build WindowsMediaController
       run: dotnet build WindowsMediaController --configuration Release
     - name: Upload WindowsMediaController
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: WindowsMediaController
         path: .\WindowsMediaController\bin\Release\
@@ -41,7 +41,7 @@ jobs:
     - name: Build Sample.CMD
       run: dotnet build Sample.CMD --configuration Debug
     - name: Upload Sample.CMD
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: Sample.CMD
         path: .\Sample.CMD\bin\Debug\net472\
@@ -49,7 +49,7 @@ jobs:
     - name: Build Sample.UI
       run: dotnet build Sample.UI --configuration Debug
     - name: Upload Sample.UI
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: Sample.UI
         path: .\Sample.UI\bin\Debug\net6.0-windows10.0.22000.0\
