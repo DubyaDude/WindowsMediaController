@@ -53,4 +53,4 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: Sample.UI
-        path: .\Sample.UI\bin\Debug\net8.0-windows10.0.26100.0\
+        path: .\Sample.UI\bin\Debug\net10.0-windows10.0.26100.0\
