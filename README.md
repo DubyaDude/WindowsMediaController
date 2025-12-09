@@ -3,7 +3,9 @@
 
 This repository provides a wrapper for developers to more easily get information from and interact with the Windows 10/11 OS media interface (Also referred to Windows System Media Transport Controls (SMTC)). 
 
-![Windows 10 Media Interface](https://raw.githubusercontent.com/DubyaDude/WindowsMediaController/master/docs/images/Win10.png)
+| Windows 10    | Windows 11    |
+| ------------- | ------------- |
+| ![Windows 10 Media Interface](https://raw.githubusercontent.com/DubyaDude/WindowsMediaController/master/docs/images/Win10.png)  | ![Windows 11 Media Interface](https://raw.githubusercontent.com/DubyaDude/WindowsMediaController/master/docs/images/Win11.png)  |
 
 This allows for a better understanding and control of the Media Sessions and can have many different applications. Some features include:
 - Control playback on individual Media Sessions (Spotify, Chrome, etc)
