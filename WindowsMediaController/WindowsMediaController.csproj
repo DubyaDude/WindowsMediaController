@@ -58,6 +58,9 @@
 	<ItemGroup Condition="'$(TargetFramework.TrimEnd(`0123456789.`))' != 'net' and '$(TargetFramework.TrimEnd(`0123456789.`))' != 'netcoreapp'">
 		<PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="6.0.0" />
 	</ItemGroup>
+	<PropertyGroup Condition="'$(TargetFramework.TrimEnd(`0123456789.`))' != 'netcoreapp'">
+		<RestoreEnablePackagePruning>false</RestoreEnablePackagePruning>
+	</PropertyGroup>
 	<ItemGroup>
 		<Reference Update="System">
 			<Private>False</Private>
